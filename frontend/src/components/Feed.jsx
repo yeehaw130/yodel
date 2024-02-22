@@ -11,7 +11,7 @@ const Feed = () => {
 
     return (
         <div>
-            <h1>Feed Page</h1>
+            <h1>Feed</h1>
             {playlists.map((playlist) => (
                 <Playlist key={playlist.id} playlist={playlist} />
             ))}
