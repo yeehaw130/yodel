@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 // import Login from "./components/pages/Login";
 // import Signup from "./components/pages/Signup";
 import Profile from "./components/pages/Profile";
-import Feed from "./components/pages/Feed";
+import Feed from "./components/pages/Home";
 import { useContext, useState, useCallback } from "react";
 // import { AuthContext } from "./contexts/AuthContext/AuthContext";
 // import { NotificationContainer } from "react-notifications";
