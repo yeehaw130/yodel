@@ -2,6 +2,8 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import React from 'react';
+import FirestoreExample from './FirestoreExample';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -28,8 +30,13 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <div>
+        <h1>Your Vite-Initialized React App</h1>
+        <FirestoreExample />
+      </div>
     </>
   )
 }
 
 export default App
+
