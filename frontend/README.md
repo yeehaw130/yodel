@@ -12,9 +12,22 @@ To build the project, run:
 ```bash
 vite build
 ```
+
+or
+
+```bash
+npm run build
+```
+
 To start the development server, run:
 ```bash
 vite preview
 ```
-You should also be able to use the standard npm scripts.
+
+or 
+
+```bash
+npm run dev
+```
+
 
