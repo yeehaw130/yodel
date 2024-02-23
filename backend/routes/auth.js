@@ -14,7 +14,7 @@ router.post('/validateusername', async (req, res) => {
     } catch (error) {
         res.status(400).send(error.message);
     }
-}u
+}
 );
 // Signup endpoint
 router.post('/signup', async (req, res) => {
