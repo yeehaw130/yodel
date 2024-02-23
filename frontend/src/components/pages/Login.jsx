@@ -1,78 +1,78 @@
-import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
-import { auth } from '../../firebase';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useUserAuth } from "../../auth/Auth";
+import { BasicButton, PageContainer, StyledForm, ErrorMessage } from "../CommonStyles";
 
 const Login = () => {
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [error, setError] = useState("");
+	const { logIn, user, loading } = useUserAuth();
 	const navigate = useNavigate();
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
 
-	const onLogin = (e) => {
-		e.preventDefault();
-		signInWithEmailAndPassword(auth, email, password)
-			.then((userCredential) => {
-				// Signed in
-				const user = userCredential.user;
-				navigate("/home")
-				console.log(user);
-			})
-			.catch((error) => {
-				const errorCode = error.code;
-				const errorMessage = error.message;
-				console.log(errorCode, errorMessage)
-			});
-
+	if (loading) {
+		return <p>Loading...</p>;
 	}
 
+	// Redirect to home if user is already logged in
+	if (user) {
+		navigate("/");
+	}
+
+	// Handle form submission for user login
+	const onSubmit = async (e) => {
+		e.preventDefault();
+		setError("");
+		try {
+			await logIn(email, password);
+			navigate("/");
+		} catch (err) {
+			setError(err.message);
+			console.error(err);
+		}
+	};
+
 	return (
-		<>
-			<main >
-				<section>
-					<div>
-						<p> Login </p>
-						<form>
-							<div>
-								<label htmlFor="email-address">
-									Email address
-								</label>
-								<input
-									id="email-address"
-									name="email"
-									type="email"
-									required
-									placeholder="Email address"
-									onChange={(e) => setEmail(e.target.value)}
-								/>
-							</div>
-
-							<div>
-								<label htmlFor="password">
-									Password
-								</label>
-								<input
-									id="password"
-									name="password"
-									type="password"
-									required
-									placeholder="Password"
-									onChange={(e) => setPassword(e.target.value)}
-								/>
-							</div>
-
-							<div>
-								<button
-									onClick={onLogin}
-								>
-									Login
-								</button>
-							</div>
-						</form>
-					</div>
-				</section>
-			</main>
-		</>
+		<PageContainer>
+			<StyledForm>
+				<h1> Login </h1>
+				<div>
+					<label htmlFor="email-address">
+						Email address
+					</label>
+					<input
+						id="email-address"
+						type="email"
+						label="Email address"
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
+						required
+						placeholder="Email address"
+					/>
+				</div>
+				<div>
+					<label htmlFor="password">
+						Password
+					</label>
+					<input
+						id="password"
+						type="password"
+						label="Create password"
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+						required
+						placeholder="Password"
+					/>
+				</div>
+				<BasicButton onClick={onSubmit}>
+					Login
+				</BasicButton>
+			</StyledForm>
+			{error && <ErrorMessage>{error}</ErrorMessage>}
+			<p>
+				Don't have an account? <Link to="/signup">Sign up</Link>
+			</p>
+		</PageContainer>
 	)
 }
 
