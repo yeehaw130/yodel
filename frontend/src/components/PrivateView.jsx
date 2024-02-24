@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useUserAuth } from "../auth/Auth";
-import SideBar from "./SideBar";
+import SideBar from "./Sidebar";
 import styled from "styled-components";
 
 const PrivateProxy = ({ children }) => {
