@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useUserAuth } from "../../auth/Auth";
 import { BasicButton, PageContainer, StyledForm, ErrorMessage } from "../CommonStyles";
 
 const Signup = () => {
 	const [email, setEmail] = useState("");
+	const [username, setUsername] = useState("");
 	const [error, setError] = useState("");
 	const [password, setPassword] = useState("");
 	const { signUp, loading, user } = useUserAuth();
@@ -23,7 +24,7 @@ const Signup = () => {
 		e.preventDefault();
 		setError("");
 		try {
-			await signUp(email, password);
+			await signUp(email, username, password);
 			navigate("/login");
 		} catch (err) {
 			setError(err.message);
@@ -57,6 +58,8 @@ const Signup = () => {
 						id="username"
 						type="text"
 						label="Create username"
+						onChange={(e) => setUsername(e.target.value)}
+						required
 						placeholder="Username"
 					/>
 				</div>

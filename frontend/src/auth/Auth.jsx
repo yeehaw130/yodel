@@ -7,20 +7,37 @@ import {
 } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 
+import axios from "axios";
+
 const userAuthContext = createContext();
 
 export function UserAuthContextProvider({ children }) {
     const [user, setUser] = useState({});
     const [loading, setLoading] = useState(true);
 
-    function logIn(email, password) {
-        return signInWithEmailAndPassword(auth, email, password);
+    async function logIn(email, password) {
+        await signInWithEmailAndPassword(auth, email, password);
     }
-    function signUp(email, password) {
-        return createUserWithEmailAndPassword(auth, email, password);
+
+    async function signUp(email, username, password) {
+        try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            await axios.post(import.meta.env.VITE_BACKEND_URL + "/api/auth/validateusername", {
+                username
+            });
+            await axios.post(import.meta.env.VITE_BACKEND_URL + "/api/auth/signup", {
+                userRecord: auth.currentUser,
+                username
+            });
+        }
+        catch (error){
+            //TODO: better error handling
+            console.error("Failed to sign up: " + error);
+        }
+
     }
-    function logOut() {
-        return signOut(auth);
+    async function logOut() {
+        await signOut(auth);
     }
 
     useEffect(() => {
