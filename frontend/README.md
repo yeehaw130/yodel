@@ -11,6 +11,7 @@ Currently, two official plugins are available:
 Before building, make sure you create a `.env` file in the root. To the root, add your firebase API key as follows:
 ```
 VITE_FIREBASE_API_KEY=...
+VITE_BACKEND_URL=...
 ```
 
 To build the project, run:
