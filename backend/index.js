@@ -3,7 +3,6 @@ const bodyParser = require('body-parser');
 const exampleRoutes = require('./routes/exampleRoutes');
 const authRoutes = require('./routes/auth');
 
-
 const app = express();
 const port = process.env.PORT || 3000;
 

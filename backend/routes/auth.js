@@ -18,11 +18,10 @@ router.post('/validateusername', async (req, res) => {
 );
 // Signup endpoint
 router.post('/signup', async (req, res) => {
-    const { userRecord, displayName, username } = req.body;
+    const { userRecord, username } = req.body;
     try {
         // Add user information in Firestore
         await db.collection('users').doc(userRecord.uid).set({
-            displayName,
             username,
             email: userRecord.email,
             createdAt: new Date().toISOString(),
