@@ -1,77 +1,89 @@
-import React, { useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
-import { auth } from '../../firebase';
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useUserAuth } from "../../auth/Auth";
+import { BasicButton, PageContainer, StyledForm, ErrorMessage } from "../CommonStyles";
 
 const Signup = () => {
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
+	const [email, setEmail] = useState("");
+	const [error, setError] = useState("");
+	const [password, setPassword] = useState("");
+	const { signUp, loading, user } = useUserAuth();
 	const navigate = useNavigate();
 
-	const onSubmit = async (e) => {
-		e.preventDefault()
-
-		await createUserWithEmailAndPassword(auth, email, password)
-			.then((userCredential) => {
-				// Signed in
-				const user = userCredential.user;
-				console.log(user);
-				navigate("/login")
-			})
-			.catch((error) => {
-				const errorCode = error.code;
-				const errorMessage = error.message;
-				console.log(errorCode, errorMessage);
-			});
+	if (loading) {
+		return <p>Loading...</p>;
+	}
+	
+	// Redirect to home if user is already logged in
+	if (user) {
+		navigate("/");
 	}
 
+	const onSubmit = async (e) => {
+		e.preventDefault();
+		setError("");
+		try {
+			await signUp(email, password);
+			navigate("/login");
+		} catch (err) {
+			setError(err.message);
+			console.error(err);
+		}
+	};
+
 	return (
-		<main >
-			<section>
+		<PageContainer>
+			<StyledForm>
+				<h1> Sign Up </h1>
 				<div>
-					<div>
-						<h1> Sign Up </h1>
-						<form>
-							<div>
-								<label htmlFor="email-address">
-									Email address
-								</label>
-								<input
-									type="email"
-									label="Email address"
-									value={email}
-									onChange={(e) => setEmail(e.target.value)}
-									required
-									placeholder="Email address"
-								/>
-							</div>
-
-							<div>
-								<label htmlFor="password">
-									Password
-								</label>
-								<input
-									type="password"
-									label="Create password"
-									value={password}
-									onChange={(e) => setPassword(e.target.value)}
-									required
-									placeholder="Password"
-								/>
-							</div>
-
-							<button
-								type="submit"
-								onClick={onSubmit}
-							>
-								Sign up
-							</button>
-						</form>
-					</div>
+					<label htmlFor="email-address">
+						Email address
+					</label>
+					<input
+						id="email-address"
+						type="email"
+						label="Email address"
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
+						required
+						placeholder="Email address"
+					/>
 				</div>
-			</section>
-		</main>
-	);
-};
+				<div>
+					<label htmlFor="username">
+						Username
+					</label>
+					<input
+						id="username"
+						type="text"
+						label="Create username"
+						placeholder="Username"
+					/>
+				</div>
+				<div>
+					<label htmlFor="password">
+						Password
+					</label>
+					<input
+						id="password"
+						type="password"
+						label="Create password"
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+						required
+						placeholder="Password"
+					/>
+				</div>
+				<BasicButton onClick={onSubmit}>
+					Sign Up
+				</BasicButton>
+			</StyledForm>
+			{error && <ErrorMessage>{error}</ErrorMessage>}
+			<p>
+				Already have an account? <Link to="/login">Log in</Link>
+			</p>
+		</PageContainer>
+	)
+}
 
-export default Signup;
+export default Signup

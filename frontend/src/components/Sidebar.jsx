@@ -1,18 +1,32 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useNavigate, Link } from 'react-router-dom';
+import { useUserAuth } from "../auth/Auth";
 
-const Sidebar = (user) => {
-    const { username } = user;
+const Sidebar = () => {
+    const { logOut, user } = useUserAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        try {
+            await logOut();
+            navigate("/login");
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
+
     return (
         <SidebarContainer>
-            <StyledLink href="/">Home</StyledLink>
-            <StyledLink href={`/profile/${username}`}>Profile</StyledLink>
-            <StyledLink href="/inbox">Inbox</StyledLink>
+            <StyledLink to="/">Home</StyledLink>
+            <StyledLink to={`/profile/${user.email}`}>Profile</StyledLink>
+            <StyledLink to="/inbox">Inbox</StyledLink>
+            <StyledLink to="#" onClick={handleLogout}>Logout</StyledLink>
         </SidebarContainer>
     );
 };
 
-const StyledLink = styled.a`
+const StyledLink = styled(Link)`
     margin: 10px 0;
     text-decoration: none;
     color: black;
