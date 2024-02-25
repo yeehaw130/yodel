@@ -13,14 +13,15 @@ export function UserAuthContextProvider({ children }) {
     const [user, setUser] = useState({});
     const [loading, setLoading] = useState(true);
 
-    function logIn(email, password) {
-        return signInWithEmailAndPassword(auth, email, password);
+    async function logIn(email, password) {
+        await signInWithEmailAndPassword(auth, email, password);
     }
-    function signUp(email, password) {
-        return createUserWithEmailAndPassword(auth, email, password);
+    async function signUp(email, password) {
+        await createUserWithEmailAndPassword(auth, email, password);
+        
     }
-    function logOut() {
-        return signOut(auth);
+    async function logOut() {
+        await signOut(auth);
     }
 
     useEffect(() => {
