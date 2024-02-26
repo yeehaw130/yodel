@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useNavigate, Link } from 'react-router-dom';
 import { useUserAuth } from "../auth/Auth";
+import Spotify from "./pages/Spotify"
 
 const Sidebar = () => {
     const { logOut, user } = useUserAuth();
@@ -21,6 +22,7 @@ const Sidebar = () => {
             <StyledLink to="/">Home</StyledLink>
             <StyledLink to={`/profile/${user.email}`}>Profile</StyledLink>
             <StyledLink to="/inbox">Inbox</StyledLink>
+            <StyledLink to="/spotify">Spotify</StyledLink>
             <StyledLink to="#" onClick={handleLogout}>Logout</StyledLink>
         </SidebarContainer>
     );

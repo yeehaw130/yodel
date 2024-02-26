@@ -7,6 +7,7 @@ import Inbox from './components/pages/Inbox';
 import { useState, useCallback } from "react";
 import PrivateView from './components/PrivateView';
 import Home from './components/pages/Home';
+import Spotify from './components/pages/Spotify';
 import { UserAuthContextProvider } from "./auth/Auth";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
 		setRerenderFeed(newValue);
 	}, []);
 
+  
 	return (
 		<UserAuthContextProvider>
 			<Routes>
@@ -34,10 +36,12 @@ function App() {
 					</PrivateView>
 				} />
 				<Route path="/login" element={<Login />} />
+				<Route path="/spotify" element={<Spotify />} />
 				<Route path="/signup" element={<Signup />} />
 				<Route path="*" element={<Navigate to="/" />} />
 			</Routes>
-		</UserAuthContextProvider>
+
+    </UserAuthContextProvider>
 	);
 }
 
