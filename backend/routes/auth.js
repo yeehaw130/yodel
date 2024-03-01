@@ -9,21 +9,26 @@ router.post('/validateusername', async (req, res) => {
         if (user.empty) {
             res.status(200).send('Username is available');
         } else {
-            res.status(400).send('Username is not available');
+            res.status(409).send('Username is not available');
         }
     } catch (error) {
-        res.status(400).send(error.message);
+        console.error("Validate Username Error:", error);
+        res.status(500).send("Failed to validate username");
     }
 }
 );
 // Signup endpoint
 router.post('/signup', async (req, res) => {
-    const { userRecord, username } = req.body;
+    const { token, email, username } = req.body;
     try {
+        // Verify the ID token
+        const decodedToken = await admin.auth().verifyIdToken(token);
+        const uid = decodedToken.uid;
+
         // Add user information in Firestore
-        await db.collection('users').doc(userRecord.uid).set({
+        await db.collection('users').doc(uid).set({
             username,
-            email: userRecord.email,
+            email,
             createdAt: new Date().toISOString(),
             isPublic: false,
             followers: [],
@@ -32,9 +37,10 @@ router.post('/signup', async (req, res) => {
             ownedPlaylists: [],
         });
         
-        res.status(201).send({ uid: userRecord.uid });
+        res.status(201).json({ message: "Signup successful", uid });
     } catch (error) {
-        res.status(400).send(error.message);
+        console.error("Signup Error:", error);
+        res.status(500).json({ message: "Failed to complete signup" });
     }
 });
 
