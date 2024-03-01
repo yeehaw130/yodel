@@ -37,7 +37,16 @@ router.delete('/:playlistId/likes', async (req, res) => {
     }
 });
 
-// GET all users playlists from musicapi
-router.
+// GET fetch users playlists from musicapi
+router.get('/fetch/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const result = await playlistService.fetchPlaylists(userId);
+        res.json(result.results);
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+});
+
 
 module.exports = router;

@@ -41,10 +41,10 @@ router.get('/connectservice/:userId', async (req, res) => {
     const { userId } = req.params;
     const { data64 } = req.query;
     try {
-        await authService.connectService(userId, data64);
+        await authService.connectMusicService(userId, data64);
         res.redirect('http://localhost:5173');
     } catch (error) {
-        res.status(401).send("Failed to connect to music service");
+        res.status(500).send({ error: "Failed to connect to music service", message: error.message });
     }
 });
 
