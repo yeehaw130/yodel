@@ -37,4 +37,7 @@ router.delete('/:playlistId/likes', async (req, res) => {
     }
 });
 
+// GET all users playlists from musicapi
+router.
+
 module.exports = router;

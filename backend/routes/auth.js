@@ -37,4 +37,15 @@ router.post('/verifytoken', async (req, res) => {
     }
 });
 
+router.get('/connectservice/:userId', async (req, res) => {
+    const { userId } = req.params;
+    const { data64 } = req.query;
+    try {
+        await authService.connectService(userId, data64);
+        res.redirect('http://localhost:5173');
+    } catch (error) {
+        res.status(401).send("Failed to connect to music service");
+    }
+});
+
 module.exports = router;
