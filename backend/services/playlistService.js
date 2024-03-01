@@ -1,11 +1,7 @@
 // playlistService.js
 
-const importPlaylist = async (userId, playlistData) => {
-    // Logic to import a playlist from a third-party platform
-};
-
-const exportPlaylist = async (playlistId, platform) => {
-    // Logic to export a playlist to a third-party platform
+const importPlaylists = async (userId, externalService) => {
+    // Logic to import playlists from a third-party platform
 };
 
 const likePlaylist = async (userId, playlistId) => {
@@ -17,8 +13,7 @@ const unlikePlaylist = async (userId, playlistId) => {
 };
 
 module.exports = {
-    importPlaylist,
-    exportPlaylist,
+    importPlaylists,
     likePlaylist,
     unlikePlaylist,
 };

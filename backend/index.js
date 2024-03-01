@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/auth');
 const feedRoutes = require('./routes/feed');
-const musicRoutes = require('./routes/music');
+const searchRoutes = require('./routes/search');
 const playlistsRoutes = require('./routes/playlists');
 const socialRoutes = require('./routes/social');
 const cors = require('cors');
@@ -19,7 +19,7 @@ app.use(cors());
 // Use the routes
 app.use('/api/auth', authRoutes)
 app.use('/api/feed', feedRoutes)
-app.use('/api/music', musicRoutes)
+app.use('/api/search', searchRoutes)
 app.use('/api/playlists', playlistsRoutes)
 app.use('/api/social', socialRoutes)
 

@@ -8,8 +8,8 @@ const unfollowUser = async (userId, targetUserId) => {
     // Logic to unfollow a user
 };
 
-const recommendSong = async (senderId, receiverId, songId) => {
-    // Logic to send a song or playlist recommendation
+const sharePlaylist = async (senderId, receiverId, playlistId) => {
+    // Logic to share a playlist
 };
 
 const getUserActivity = async (userId) => {
@@ -19,6 +19,6 @@ const getUserActivity = async (userId) => {
 module.exports = {
     followUser,
     unfollowUser,
-    recommendSong,
+    sharePlaylist,
     getUserActivity,
 };

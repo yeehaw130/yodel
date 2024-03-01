@@ -24,11 +24,11 @@ router.post('/unfollow', async (req, res) => {
     }
 });
 
-// POST recommend a song to a friend
-router.post('/recommend', async (req, res) => {
+// POST share a playlist to a friend
+router.post('/sharePlaylist', async (req, res) => {
     try {
-        const { senderId, receiverId, songId } = req.body;
-        const result = await socialService.recommendSong(senderId, receiverId, songId);
+        const { senderId, receiverId, playlistId } = req.body;
+        const result = await socialService.sharePlaylist(senderId, receiverId, playlistId);
         res.json(result);
     } catch (error) {
         res.status(500).send(error.message);

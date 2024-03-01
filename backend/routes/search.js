@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const musicService = require('../services/musicService');
+const searchService = require('../services/searchService');
 
-// GET perform a server-side search across connected music platforms to find songs or playlists
+// GET perform a search to find songs or playlists
 router.get('/search', async (req, res) => {
     try {
         const { query } = req.query;
-        const results = await musicService.searchMusic(query);
+        const results = await searchService.searchMusic(query);
         res.json(results);
     } catch (error) {
         console.error('Error searching music:', error);
@@ -15,10 +15,10 @@ router.get('/search', async (req, res) => {
 });
 
 // GET retrieve detailed information about a song
-router.get('/details/:songId', async (req, res) => {
+router.get('/song/:songId', async (req, res) => {
     try {
         const { songId } = req.params;
-        const songDetails = await musicService.getSongDetails(songId);
+        const songDetails = await searchService.getSongDetails(songId);
         res.json(songDetails);
     } catch (error) {
         console.error('Error getting song details:', error);
