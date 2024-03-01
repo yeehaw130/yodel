@@ -1,5 +1,6 @@
 import { auth } from "../firebase";
 import {
+    getAuth,
     createUserWithEmailAndPassword,
     onAuthStateChanged,
     signInWithEmailAndPassword,
@@ -20,19 +21,27 @@ export function UserAuthContextProvider({ children }) {
     }
 
     async function signUp(email, username, password) {
+        const auth = getAuth();
         try {
-            await createUserWithEmailAndPassword(auth, email, password);
             await axios.post(import.meta.env.VITE_BACKEND_URL + "/api/auth/validateusername", {
                 username
             });
+        } catch (error) {
+            throw new Error("Username validation failed: " + (error.response?.data || error.message));
+        }
+
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const token = await userCredential.user.getIdToken();
+
             await axios.post(import.meta.env.VITE_BACKEND_URL + "/api/auth/signup", {
-                userRecord: auth.currentUser,
+                token,
+                email,
                 username
             });
         }
         catch (error){
-            //TODO: better error handling
-            console.error("Failed to sign up: " + error);
+            throw new Error("Signup failed: " + (error.response?.data || error.message));
         }
 
     }

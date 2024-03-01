@@ -1,48 +1,36 @@
 const express = require('express');
-const { admin, db } = require('../config/firebaseConfig');
 const router = express.Router();
+const authService = require('../services/authService');
 
 router.post('/validateusername', async (req, res) => {
     const { username } = req.body;
     try {
-        const user = await db.collection('users').where('username', '==', username).get();
-        if (user.empty) {
+        const isAvailable = await authService.validateUsername(username);
+        if (isAvailable) {
             res.status(200).send('Username is available');
         } else {
-            res.status(400).send('Username is not available');
+            res.status(409).send('Username is not available');
         }
     } catch (error) {
-        res.status(400).send(error.message);
-    }
-}
-);
-// Signup endpoint
-router.post('/signup', async (req, res) => {
-    const { userRecord, username } = req.body;
-    try {
-        // Add user information in Firestore
-        await db.collection('users').doc(userRecord.uid).set({
-            username,
-            email: userRecord.email,
-            createdAt: new Date().toISOString(),
-            isPublic: false,
-            followers: [],
-            following: [],
-            likedPlaylists: [],
-            ownedPlaylists: [],
-        });
-        
-        res.status(201).send({ uid: userRecord.uid });
-    } catch (error) {
-        res.status(400).send(error.message);
+        console.error("Validate Username Error:", error);
+        res.status(500).send("Failed to validate username");
     }
 });
 
-// Token verification endpoint
-router.post('/verifyToken', async (req, res) => {
+router.post('/signup', async (req, res) => {
+    try {
+        const uid = await authService.signup(req.body);
+        res.status(201).json({ message: "Signup successful", uid });
+    } catch (error) {
+        console.error("Signup Error:", error);
+        res.status(500).json({ message: "Failed to complete signup" });
+    }
+});
+
+router.post('/verifytoken', async (req, res) => {
     const { token } = req.body;
     try {
-        const decodedToken = await admin.auth().verifyIdToken(token);
+        const decodedToken = await authService.verifyToken(token);
         res.status(200).send(decodedToken);
     } catch (error) {
         res.status(401).send('Invalid token');
