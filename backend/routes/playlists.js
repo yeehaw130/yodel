@@ -42,11 +42,21 @@ router.get('/fetch/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
         const result = await playlistService.fetchPlaylists(userId);
-        res.json(result.results);
+        res.json(result);
     } catch (error) {
         res.status(500).send(error.message)
     }
 });
 
+// POST import playlist to profile
+router.post('/import/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { playlist } = req.body;
+        await playlistService.importPlaylist(playlist, userId);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
 
 module.exports = router;
