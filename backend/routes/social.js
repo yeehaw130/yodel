@@ -25,7 +25,7 @@ router.post('/unfollow', async (req, res) => {
 });
 
 // POST share a playlist to a friend
-router.post('/sharePlaylist', async (req, res) => {
+router.post('/share', async (req, res) => {
     try {
         const { senderId, receiverId, playlistId } = req.body;
         const result = await socialService.sharePlaylist(senderId, receiverId, playlistId);

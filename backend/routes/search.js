@@ -3,7 +3,7 @@ const router = express.Router();
 const searchService = require('../services/searchService');
 
 // GET perform a search to find songs or playlists
-router.get('/search', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const { query } = req.query;
         const results = await searchService.searchMusic(query);
