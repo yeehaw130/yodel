@@ -12,18 +12,22 @@ const unlikePlaylist = async (userId, playlistId) => {
 };
 
 const fetchPlaylists = async (userId) => {
-    const docRef = db.collection('users').doc(userId);
-    const docSnapshot = await docRef.get();
-    if (!docSnapshot.exists) {
-        throw new Error('Document does not exist');
+    const userRef = db.collection('users').doc(userId);
+    const userSnapshot = await userRef.get();
+    if (!userSnapshot.exists) {
+        throw new Error('User document does not exist');
     }
-    const integrationUserUUID = docSnapshot.get("integrationUserUUID");
-    const fetchPlaylistsUrl = `https://api.musicapi.com/api/${integrationUserUUID}/playlists`
-    const secret = `${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`
+    const integrationUserUUID = userSnapshot.get("integrationUserUUID");
+    if (!integrationUserUUID) {
+        throw new Error('Integration user UUID is missing');
+    }
+
+    const fetchPlaylistsUrl = `https://api.musicapi.com/api/${integrationUserUUID}/playlists`;
+    const secret = `${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`;
     const headers = {
         'Accept': 'application/json',
         'Authorization': "Basic " + Buffer.from(secret).toString('base64')
-    }
+    };
     const playlists = await axios.get(fetchPlaylistsUrl, { headers }).then(res => res.data);
     return playlists.results;
 };
