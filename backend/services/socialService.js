@@ -22,8 +22,10 @@ const followUser = async (userId, targetUserId) => {
     const targetUserRef = db.collection('users').doc(targetUserId);
     const targetUserPublic = await targetUserRef.get("isPublic");
     if (targetUserPublic) {
-        await acceptFollowRequest(followid);
+        followData = await acceptFollowRequest(followid);
     }
+
+    return followData;
 };
 
 const acceptFollowRequest = async (followId) => {
@@ -48,7 +50,19 @@ const acceptFollowRequest = async (followId) => {
     await followerDocRef.update({
         following: db.FieldValue.increment(1)
     });
+
+    return follow.data();
 };
+
+const handleFollowRequest = async (followId, accept) => {
+    if (accept) {
+        return acceptFollowRequest(followId);
+    } else {
+        const followDocRef = db.collection('follows').doc(followId);
+        await followDocRef.delete();
+        return {};
+    }
+}
 
 const unfollowUser = async (userId, targetUserId) => {
     const followId = userId + targetUserId;
@@ -72,6 +86,7 @@ const unfollowUser = async (userId, targetUserId) => {
     }
 
     await followDocRef.delete();
+    return {};
 };
 
 const sharePlaylist = async (senderId, receiverId, playlistId) => {
@@ -83,7 +98,7 @@ const getUserActivity = async (userId) => {
 };
 
 const getFollowers = async (userId) => {
-    const docRef = db.collection('follows').where('following', '==', userId);
+    const docRef = db.collection('follows').where('following', '==', userId).where('status', '==', 'active');
     const docSnapshot = await docRef.get();
     const followers = [];
     docSnapshot.forEach(doc => {
@@ -93,7 +108,7 @@ const getFollowers = async (userId) => {
 };
 
 const getFollowing = async (userId) => {
-    const docRef = db.collection('follows').where('follower', '==', userId);
+    const docRef = db.collection('follows').where('follower', '==', userId).where('status', '==', 'active');
     const docSnapshot = await docRef.get();
     const following = [];
     docSnapshot.forEach(doc => {
@@ -102,12 +117,23 @@ const getFollowing = async (userId) => {
     return following;
 }
 
+const getFollowRequests = async (userId) => {
+    const docRef = db.collection('follows').where('following', '==', userId).where('status', '==', 'pending');
+    const docSnapshot = await docRef.get();
+    const requests = [];
+    docSnapshot.forEach(doc => {
+        requests.push(doc.data().follower);
+    });
+    return requests;
+}
+
 module.exports = {
     followUser,
-    acceptFollowRequest,
+    handleFollowRequest,
     unfollowUser,
     sharePlaylist,
     getUserActivity,
     getFollowers,
-    getFollowing
+    getFollowing,
+    getFollowRequests,
 };
