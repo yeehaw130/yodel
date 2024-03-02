@@ -1,70 +1,77 @@
 // socialService.js
 const { db } = require('../config/firebaseConfig');
 
-const followUserHelper = async (userId, targetUserId) => {
-    // add follower to target user
-    const targetDocRef = db.collection('users').doc(targetUserId);
-    const targetFollowers = await targetDocRef.get('followers');
-    await targetDocRef.update({
-        followers: [...targetFollowers, followerId]
-    });
-
-    // add following to user
-    const userDocRef = db.collection('users').doc(userId);
-    const userFollowings = await userDocRef.get(following);
-    await userDocRef.update({
-        following: [...userFollowings, followingId]
-    });
-};
-
 const followUser = async (userId, targetUserId) => {
-    const targetDocRef = db.collection('users').doc(targetUserId);
-    const targetIsPublic = await targetDocRef.get('isPublic');
-    if (!targetIsPublic) {
-        // add followrequest to target user
-        const targetFollowRequests = targetData.followRequests || [];
-        await targetDocRef.update({
-            followRequests: [...targetFollowRequests, userId]
-        });
-    }
-    else {
-        followUserHelper(userId, targetUserId);
+    const followid = userId + targetUserId;
+    
+    const followRef = db.collection('follows').doc(followid);
+    const follow = await followRef.get();
+    if (follow.exists) {
+        throw new Error('Follow already exists');
     }
 
+    const followData = {
+        follower: userId,
+        following: targetUserId,
+        createdAt: db.Timestamp.now(),
+        status: "pending"
+    };
+    await followRef.set(followData);
+
+    // if target user is public, follow immediately
+    const targetUserRef = db.collection('users').doc(targetUserId);
+    const targetUserPublic = await targetUserRef.get("isPublic");
+    if (targetUserPublic) {
+        await acceptFollowRequest(followid);
+    }
 };
 
-const acceptFollowRequest = async (userId, followId) => {
-    // remove follow request from user
-    const userDocRef = db.collection('users').doc(userId);
-    const userFollowRequests = await userDocRef.get();
-    
-    await userDocRef.update({
-        followRequests: userFollowRequests.filter(request => request !== followId)
+const acceptFollowRequest = async (followId) => {
+    const followDocRef = db.collection('follows').doc(followId);
+    const follow = await followDocRef.get();
+    if (!follow.exists) {
+        throw new Error('Follow request does not exist');
+    }
+    if (follow.data().status === "active") {
+        throw new Error('Follow request already accepted');
+    }
+    await followDocRef.update({status: "active"});
+
+    // increment follower count for target user
+    const targetDocRef = db.collection('users').doc(follow.data().following);
+    await targetDocRef.update({
+        followers: db.FieldValue.increment(1)
     });
 
-    followUserHelper(userId, followId);
+    // increment following count for follower
+    const followerDocRef = db.collection('users').doc(follow.data().follower);
+    await followerDocRef.update({
+        following: db.FieldValue.increment(1)
+    });
 };
 
 const unfollowUser = async (userId, targetUserId) => {
-    const userDocRef = db.collection('users').doc(userId);
-    const userFollowings = await userDocRef.get('following');
+    const followId = userId + targetUserId;
+    const followDocRef = db.collection('follows').doc(followId);
+    const follow = await followDocRef.get();
+    if (!follow.exists) {
+        throw new Error('Follow does not exist');
+    }
+    if (follow.data().status === "active") {
+        // decrement follower count for target user
+        const targetDocRef = db.collection('users').doc(targetUserId);
+        await targetDocRef.update({
+            followers: db.FieldValue.increment(-1)
+        });
 
-    // see if user is following target
-    if (!userFollowings.includes(targetUserId)) {
-        throw new Error('User is not following target');
+        // decrement following count for follower
+        const followerDocRef = db.collection('users').doc(userId);
+        await followerDocRef.update({
+            following: db.FieldValue.increment(-1)
+        });
     }
 
-    // remove follower from target user
-    const targetDocRef = db.collection('users').doc(targetUserId);
-    const targetFollowers = await targetDocRef.get('followers');
-    await targetDocRef.update({
-        followers: targetFollowers.filter(follower => follower !== userId)
-    });
-
-    // remove following from user
-    await userDocRef.update({
-        following: userFollowings.filter(following => following !== targetUserId)
-    });
+    await followDocRef.delete();
 };
 
 const sharePlaylist = async (senderId, receiverId, playlistId) => {
@@ -76,22 +83,22 @@ const getUserActivity = async (userId) => {
 };
 
 const getFollowers = async (userId) => {
-    const docRef = db.collection('users').doc(userId);
+    const docRef = db.collection('follows').where('following', '==', userId);
     const docSnapshot = await docRef.get();
-    if (!docSnapshot.exists) {
-        throw new Error('Document does not exist');
-    }
-    const followers = docSnapshot.get("followers");
+    const followers = [];
+    docSnapshot.forEach(doc => {
+        followers.push(doc.data().follower);
+    });
     return followers;
 };
 
 const getFollowing = async (userId) => {
-    const docRef = db.collection('users').doc(userId);
+    const docRef = db.collection('follows').where('follower', '==', userId);
     const docSnapshot = await docRef.get();
-    if (!docSnapshot.exists) {
-        throw new Error('Document does not exist');
-    }
-    const following = docSnapshot.get("following");
+    const following = [];
+    docSnapshot.forEach(doc => {
+        following.push(doc.data().following);
+    });
     return following;
 }
 
