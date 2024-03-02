@@ -2,6 +2,25 @@
 
 ## API Endpoints
 ```
+POST /auth/signup
+POST /auth/validateusername
+POST /auth/verifytoken
+GET /auth/connectservice/:userId
+
+GET /feed/{userId}
+
+GET /playlists/fetch/{userId}
+POST /playlists/import/{playlistId}/{userId}
+POST /playlists/{playlistId}/likes
+DELETE /playlists/{playlistId}/likes
+
+POST /social/follow
+POST /social/unfolow
+POST /social/share
+GET /social/activity/{userId}
+
+GET /search
+GET /search/song/{songId}
 ```
 
 ## Database Schema
@@ -35,7 +54,7 @@ songs/{songId}
   - isrc: String
   - previewUrl: String
 
-playlistSongs/{playListSongId}
+playlistSongs/{playlistSongId}
   - playlist: Reference (playlists/{playlistId})
   - song: Reference (songs/{songId})
   - createdAt: Timestamp                          // Time when song was added to the playlist.
