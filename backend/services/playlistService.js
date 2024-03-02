@@ -97,6 +97,7 @@ const importPlaylist = async (playlist, userId) => {
         name: playlist.name,
         description: "",
         totalItems: playlist.totalItems,
+        coverPhotoUrl: "",
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         createdBy: userRef,
         likesCount: 0

@@ -18,6 +18,9 @@ const signup = async ({ token, email, username }) => {
         isPublic: true,
         followersCount: 0,
         followingCount: 0,
+        bio: "",
+        profilePictureUrl: "",
+        integrationUserUUID: "",
     });
 
     return uid;
