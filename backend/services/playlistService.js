@@ -1,5 +1,5 @@
 // playlistService.js
-const { db } = require('../config/firebaseConfig');
+const { admin, db } = require('../config/firebaseConfig');
 const axios = require('axios');
 require('dotenv').config();
 
@@ -71,32 +71,32 @@ const importSong = async (song) => {
 };
 
 // Function to import the playlist and its songs from MusicAPI into Firestore
-const importPlaylist = async (playlistData, userId) => {
+const importPlaylist = async (playlist, userId) => {
     const userRef = db.collection('users').doc(userId);
     const userSnapshot = await userRef.get();
     if (!userSnapshot.exists) {
         throw new Error('User does not exist');
     }
     const integrationUserUUID = userSnapshot.get("integrationUserUUID");
-    const fetchPlaylistItemsUrl = `https://api.musicapi.com/api/${integrationUserUUID}/playlists/${playlistData.id}/items`;
+    if (!integrationUserUUID) {
+        throw new Error('Integration user UUID is missing');
+    }
+    const fetchPlaylistItemsUrl = `https://api.musicapi.com/api/${integrationUserUUID}/playlists/${playlist.id}/items`;
     const secret = `${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`
     const headers = {
         'Accept': 'application/json',
         'Authorization': "Basic " + Buffer.from(secret).toString('base64')
     }
-    const songData = await axios.get(fetchPlaylistItemsUrl, { headers}).then(res => {
-        console.log(res.data.results);
-        res.data.results;
-    });
+    const songs = await axios.get(fetchPlaylistItemsUrl, { headers}).then(res => res.data.results);
 
     // Import all the playlist's songs
-    const songRefs = await Promise.all(songData.map(song => importSong(song)));
+    const songRefs = await Promise.all(songs.map(song => importSong(song)));
 
-    const playlistRef = db.collection('playlists').doc(playlistData.id);
+    const playlistRef = db.collection('playlists').doc(playlist.id);
     await playlistRef.set({
-        name: playlistData.name,
+        name: playlist.name,
         description: "",
-        totalItems: playlistData.totalItems,
+        totalItems: playlist.totalItems,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         createdBy: userRef,
         likesCount: 0
@@ -113,7 +113,9 @@ const importPlaylist = async (playlistData, userId) => {
     }));
 
     console.log('Playlist imported successfully.');
+    return { message: 'Playlist imported successfully.' };
 };
+
 
 
 module.exports = {
