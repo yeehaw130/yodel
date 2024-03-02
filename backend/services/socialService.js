@@ -1,4 +1,5 @@
 // socialService.js
+const { db } = require('../config/firebaseConfig');
 
 const followUserHelper = async (userId, targetUserId) => {
     // add follower to target user
