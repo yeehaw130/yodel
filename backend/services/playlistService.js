@@ -102,14 +102,27 @@ const importPlaylist = async (playlist, userId) => {
         likesCount: 0
     });
 
-    // Link the playlist and songs in the 'playlistSongs' collection
+    // Fetch existing song links for the playlist to avoid duplicates
+    const existingLinksSnapshot = await db.collection('playlistSongs')
+        .where('playlist', '==', playlistRef)
+        .get();
+
+    const existingSongIds = new Set();
+    existingLinksSnapshot.forEach(doc => {
+        const songRef = doc.data().song;
+        existingSongIds.add(songRef.id);
+    });
+
+    // Link new songs to the playlist, excluding duplicates
     await Promise.all(songRefs.map(songRef => {
-        const playlistSongRef = db.collection('playlistSongs').doc();
-        return playlistSongRef.set({
-            playlist: playlistRef,
-            song: songRef,
-            createdAt: admin.firestore.FieldValue.serverTimestamp()
-        });
+        if (!existingSongIds.has(songRef.id)) {
+            const playlistSongRef = db.collection('playlistSongs').doc();
+            return playlistSongRef.set({
+                playlist: playlistRef,
+                song: songRef,
+                createdAt: admin.firestore.FieldValue.serverTimestamp()
+            });
+        }
     }));
 
     console.log('Playlist imported successfully.');
