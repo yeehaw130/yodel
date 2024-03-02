@@ -30,8 +30,19 @@ const verifyToken = async (token) => {
     return decodedToken;
 };
 
+const connectMusicService = async (userId, data64) => {
+    const jsonString = Buffer.from(data64, 'base64').toString('utf-8');
+    const jsonObject = JSON.parse(jsonString);
+    const { integrationUserUUID } = jsonObject;
+    
+    await db.collection('users').doc(userId).update({
+        integrationUserUUID
+    })
+}
+
 module.exports = {
     validateUsername,
     signup,
     verifyToken,
+    connectMusicService,
 };
