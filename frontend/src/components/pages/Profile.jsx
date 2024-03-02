@@ -1,32 +1,35 @@
 import React from 'react';
 import { BasicButton } from "../CommonStyles";
-import { auth } from "../../firebase";
+import { auth, db } from "../../firebase";
+import { collection, query, where, getDocs, doc } from "firebase/firestore";
 import axios from "axios";
-import { useState } from 'react';
-import './Profile.css'
+import { useEffect, useState } from 'react';
+import './Profile.css';
 
-require('module-alias/register');
-const { db } = require('@backend/config/firebaseConfig');
 
 const Profile = () => {
   const [playlists, setPlaylists] = useState([]);
   const [selectedPlaylist, setSelectedPlaylist] = useState('');
   const [fetching, setFetching] = useState(false);
-  const [uploadedPlaylistDetails, setUploadedPlaylistDetails] = useState(null);
+  const [uploadedPlaylists, setUploadedPlaylists] = useState([]);
+
 
   useEffect(() => {
-    const fetchUploadedPlaylistDetails = async () => {
-      const docRef = doc(db, "playlists", "example");
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        setUploadedPlaylistDetails(docSnap.data());
-      } else {
-        console.log("No such document!");
+    const fetchUploadedPlaylists = async () => {
+      if (auth.currentUser) {
+        const userId = auth.currentUser.uid;
+        const userRef = doc(db, "users", userId);
+        const q = query(collection(db, "playlists"), where("createdBy", "==", userRef));
+        const querySnapshot = await getDocs(q);
+        const fetchedPlaylists = [];
+        querySnapshot.forEach((doc) => {
+          fetchedPlaylists.push({ id: doc.id, ...doc.data() });
+        });
+        setUploadedPlaylists(fetchedPlaylists); // Update state with fetched playlists
       }
     };
 
-    fetchUploadedPlaylistDetails();
+    fetchUploadedPlaylists();
   }, []);
 
   const connectMusicService = () => {
@@ -88,9 +91,14 @@ const Profile = () => {
       {uploadedPlaylists.length > 0 && (
       <div>
         <h2>Uploaded Playlists</h2>
-        <ul>
+        <ul className="uploaded-playlists">
           {uploadedPlaylists.map((playlist) => (
-            <li key={playlist.id}>{playlist.name}</li>
+            <li key={playlist.id} className="playlist-item">
+              <span className="playlist-name">{playlist.name}</span>
+              <span className="playlist-detail">{playlist.totalItems} songs</span>
+              <span className="playlist-detail">{(playlist.likesCount || 0) + ' likes'}</span>
+              <span className="playlist-description">{playlist.description}</span>
+            </li>
           ))}
         </ul>
       </div>

@@ -19,4 +19,28 @@
     border: 1px solid #ccc;
 }
 
+.uploaded-playlists {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0;
+  }
+  
+  .playlist-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .playlist-name {
+    font-weight: bold;
+  }
+  
+  .playlist-detail,
+  .playlist-description {
+    font-size: 0.9em;
+  }
   
