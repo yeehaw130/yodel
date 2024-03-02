@@ -57,7 +57,6 @@ const importPlaylist = async (playlist, userId) => {
 }
 
 module.exports = {
-    importPlaylists,
     likePlaylist,
     unlikePlaylist,
     fetchPlaylists,

@@ -1,0 +1,22 @@
+.profile-container {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 54em;
+}
+  
+.controls-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; /* Allows items to wrap onto the next line on smaller screens */
+    gap: 10px; /* Adds some space between items */
+}
+
+.playlist-dropdown {
+    margin: 0;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+  
