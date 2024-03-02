@@ -13,7 +13,7 @@ const followUser = async (userId, targetUserId) => {
     const followData = {
         follower: userId,
         following: targetUserId,
-        createdAt: db.Timestamp.now(),
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
         status: "pending"
     };
     await followRef.set(followData);
