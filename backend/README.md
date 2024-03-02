@@ -49,7 +49,7 @@ songs/{songId}
   - name: String
   - album: Reference (albums/{albumId})               // Reference to the album document.
   - artists: Array of References (artists/{artistId}) // References to artist documents.
-  - duration: Number (seconds)
+  - duration: Number (ms)
   - imageUrl: String
   - isrc: String
   - previewUrl: String

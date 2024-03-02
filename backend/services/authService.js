@@ -14,12 +14,13 @@ const signup = async ({ token, email, username }) => {
     await db.collection('users').doc(uid).set({
         username,
         email,
-        createdAt: new Date().toISOString(),
-        isPublic: false,
-        followers: [],
-        following: [],
-        likedPlaylists: [],
-        ownedPlaylists: [],
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        isPublic: true,
+        followersCount: 0,
+        followingCount: 0,
+        bio: "",
+        profilePictureUrl: "",
+        integrationUserUUID: "",
     });
 
     return uid;
