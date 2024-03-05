@@ -31,6 +31,7 @@ const getUserPlaylists = async (userId, reqId) => {
     return playlists;
 }
 
+// TODO: dont return the whole user document
 const getUserInfo = async (userId, reqId) => {
     await checkIfUserIsAuthorized(userId, reqId);
     const userRef = db.collection('users').doc(userId);

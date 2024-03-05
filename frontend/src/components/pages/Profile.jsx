@@ -21,7 +21,7 @@ const Profile = () => {
 
       try {
         const playlistResponse = await axios.get(
-          import.meta.env.VITE_BACKEND_URL + "/api/playlists/fetch/" + userId,
+          import.meta.env.VITE_BACKEND_URL + "/api/profile/playlists" + userId,
           { params: { reqId: reqId } }
         ).then(res => res.data);
         setUploadedPlaylists(playlistResponse);
@@ -31,6 +31,21 @@ const Profile = () => {
       }
     };
 
+    const fetchUserInformation = async () => {
+      const reqId = auth.currentUser.uid;
+      try {
+        const userResponse = await axios.get(
+          import.meta.env.VITE_BACKEND_URL + "/api/profile/" + userId,
+          { params: { reqId: reqId } }
+        ).then(res => res.data);
+        console.log(userResponse);
+      }
+      catch (error) {
+        throw new Error("Failed to fetch user information: " + (error.response?.data || error.message));
+      }
+    }
+    
+    fetchUserInformation();
     fetchUploadedPlaylists();
   }, []);
 
@@ -69,6 +84,7 @@ const Profile = () => {
       <div className="profile-container">
         <h1>Profile Page</h1>
         <h2>Viewing someone else's profile</h2>
+        {/* TODO just show user info */}
       </div>
     );
   }

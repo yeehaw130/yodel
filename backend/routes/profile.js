@@ -15,7 +15,7 @@ router.get('/playlists/:userId', async (req, res) => {
 });
 
 // GET user's info
-router.get('/info/:userId', async (req, res) => {
+router.get('/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
         const reqId = req.body.userId;
