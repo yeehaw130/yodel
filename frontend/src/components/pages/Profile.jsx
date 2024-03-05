@@ -1,9 +1,9 @@
 import React from 'react';
 import { BasicButton } from "../CommonStyles";
-import { auth, db } from "../../firebase";
-import { collection, query, where, getDocs, doc } from "firebase/firestore";
+import { auth } from "../../firebase";
 import axios from "axios";
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import './Profile.css';
 
 
@@ -12,20 +12,22 @@ const Profile = () => {
   const [selectedPlaylist, setSelectedPlaylist] = useState('');
   const [fetching, setFetching] = useState(false);
   const [uploadedPlaylists, setUploadedPlaylists] = useState([]);
+  const { userId } = useParams();
 
 
   useEffect(() => {
     const fetchUploadedPlaylists = async () => {
-      if (auth.currentUser) {
-        const userId = auth.currentUser.uid;
-        const userRef = doc(db, "users", userId);
-        const q = query(collection(db, "playlists"), where("createdBy", "==", userRef));
-        const querySnapshot = await getDocs(q);
-        const fetchedPlaylists = [];
-        querySnapshot.forEach((doc) => {
-          fetchedPlaylists.push({ id: doc.id, ...doc.data() });
-        });
-        setUploadedPlaylists(fetchedPlaylists); // Update state with fetched playlists
+      const reqId = auth.currentUser.uid;
+
+      try {
+        const playlistResponse = await axios.get(
+          import.meta.env.VITE_BACKEND_URL + "/api/playlists/fetch/" + userId,
+          { params: { reqId: reqId } }
+        ).then(res => res.data);
+        setUploadedPlaylists(playlistResponse);
+      }
+      catch (error) {
+        throw new Error("Failed to fetch playlists: " + (error.response?.data || error.message));
       }
     };
 
@@ -47,7 +49,6 @@ const Profile = () => {
       setFetching(false);
     } catch (error) {
       throw new Error("Failed to fetch playlists: " + (error.response?.data || error.message));
-      setFetching(false);
     }
   }
   
@@ -63,6 +64,14 @@ const Profile = () => {
     }
   };
 
+  if (userId !== auth.currentUser.uid) {
+    return (
+      <div className="profile-container">
+        <h1>Profile Page</h1>
+        <h2>Viewing someone else's profile</h2>
+      </div>
+    );
+  }
 
   return (
     <div className="profile-container">
