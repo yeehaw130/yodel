@@ -77,9 +77,9 @@ likes/{likeId}
   - createdAt: Timestamp                         // When the like was added.
 
 follows/{followId}
-  - follower: Reference (users/{userId})  // The user sending the follow request.
-  - following: Reference (users/{userId}) // The user receiving the follow request.
-  - createdAt: Timestamp                  // When the follow request was made or the follow was established.
-  - status: String                        // "active" for accepted follows, "pending" for follow requests awaiting approval.
-```
+  - follower: String {userId}               // The user sending the follow request.
+  - following: String {userId}              // The user receiving the follow request.
+  - createdAt: Timestamp                    // When the follow request was made or the follow was established.
+  - status: String                          // "active" for accepted follows, "pending" for follow requests awaiting approval.
+``` 
 
