@@ -16,6 +16,10 @@ DELETE /playlists/{playlistId}/likes
 
 POST /social/follow
 POST /social/unfolow
+POST /social/acceptfollow
+POST /social/rejectfollow
+GET /social/followers/{userId}
+GET /social/following/{userId}
 POST /social/share
 GET /social/activity/{userId}
 
