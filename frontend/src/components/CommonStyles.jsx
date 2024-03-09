@@ -34,3 +34,8 @@ export const ErrorMessage = styled.div`
     position: absolute;
     bottom: 10px;
 `;
+
+export const TitleText = styled.span`
+	font-size: 48px;
+	font-weight: bold;
+`;
