@@ -199,8 +199,8 @@ const Feed = () => {
         <FeedContainer>
             <TitleText>For you</TitleText>
             <DividedList>
-                {playlists.map((playlist) => (
-                    <li key={playlist.id}>
+                {playlists.map((playlist, i) => (
+                    <li key={i}>
                         <Playlist
                             playlist={playlist}
                         />

@@ -49,8 +49,8 @@ const PlaylistInfo = ({ playlist }) => {
 const SongList = ({ songs }) => {
     return (
         <ul>
-            {songs.slice(0, 4).map((song) => (
-                <li key={song.id}>
+            {songs.slice(0, 4).map((song, i) => (
+                <li key={i}>
                     <Song song={song} />
                 </li>
             ))}

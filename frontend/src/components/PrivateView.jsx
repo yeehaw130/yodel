@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Navigate } from "react-router-dom";
 import { useUserAuth } from "../auth/Auth";
 import SideBar from "./Sidebar";
@@ -15,7 +16,7 @@ const PrivateProxy = ({ children }) => {
     }
     return (
         <>
-            {/* <SideBar /> */}
+            <SideBar />
             <Wrapper>
                 {children}
             </Wrapper>
@@ -24,7 +25,7 @@ const PrivateProxy = ({ children }) => {
 };
 
 const Wrapper = styled.div`
-    // margin-left: 200px;
+    margin-left: 200px;
     // padding: 15px; // removed because not intuitive to have padding on the wrapper vs on the root/content itself
     @media (max-width: 768px) {
         margin-left: 0;
