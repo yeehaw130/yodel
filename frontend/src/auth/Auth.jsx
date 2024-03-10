@@ -23,6 +23,7 @@ export function UserAuthContextProvider({ children }) {
     async function signUp(email, username, password) {
         const auth = getAuth();
         try {
+            console.log(import.meta.env.VITE_BACKEND_URL + "/api/auth/validateusername")
             await axios.post(import.meta.env.VITE_BACKEND_URL + "/api/auth/validateusername", {
                 username
             });
