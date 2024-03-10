@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Feed from '../Feed';
 import FriendsWidget from '../FriendsWidget';
 import UtilityWidget from '../UtilityWidget';
 import LibraryWidget from '../LibraryWidget';
 import ProfileWidget from '../ProfileWidget';
 import styled from "styled-components";
+import axios from "axios";
+import { auth} from "../../firebase";
 
 const HomeContainer = styled.div`
   display: flex;
@@ -25,7 +27,7 @@ const WidgetColumn = styled.div`
 const Home = () => {
   const [user, setUser] = useState({
     name: "username",
-    profilePicture: "../../img/pig.jpeg",
+    profilePictureUrl: "../../img/pig.jpeg",
     playlists: [
       {
         creator: {
@@ -603,6 +605,18 @@ const Home = () => {
       }
     ]
   });
+
+  useEffect(() => {
+    const getProfilePicture = async () => {
+      // fetch user data
+      const userId = auth.currentUser.uid;
+      const profilePictureUrl = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/social/profilepicture/" + userId).then(res => res.data);
+      console.log(profilePictureUrl);
+
+      setUser({...user, profilePictureUrl})
+    }
+    getProfilePicture();
+  }, []);
 
   return (
     <HomeContainer>

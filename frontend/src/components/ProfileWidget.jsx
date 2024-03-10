@@ -15,7 +15,7 @@ const ProfileWidget = ({ user }) => {
     return (
         <Widget styles={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
             <img
-                src={user.profilePicture} alt={user.name}
+                src={user.profilePictureUrl} alt={user.name}
                 width="150px"
                 height="150px"
                 style={{ borderRadius: "50%" }}

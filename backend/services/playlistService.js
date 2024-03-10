@@ -2,6 +2,7 @@
 const { admin, db } = require('../config/firebaseConfig');
 const axios = require('axios');
 require('dotenv').config();
+const { invokeMusicAPI } = require('./services');
 
 const likePlaylist = async (userId, playlistId) => {
     // Logic to like a playlist
@@ -21,15 +22,9 @@ const fetchPlaylists = async (userId) => {
     if (!integrationUserUUID) {
         throw new Error('Integration user UUID is missing');
     }
-
     const fetchPlaylistsUrl = `https://api.musicapi.com/api/${integrationUserUUID}/playlists`;
-    const secret = `${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`;
-    const headers = {
-        'Accept': 'application/json',
-        'Authorization': "Basic " + Buffer.from(secret).toString('base64')
-    };
-    const playlists = await axios.get(fetchPlaylistsUrl, { headers }).then(res => res.data);
-    return playlists.results;
+    const res = await invokeMusicAPI(fetchPlaylistsUrl);
+    return res.results;
 };
 
 // Helper function to import a single song and its album and artists
@@ -82,12 +77,8 @@ const importPlaylist = async (playlist, userId) => {
         throw new Error('Integration user UUID is missing');
     }
     const fetchPlaylistItemsUrl = `https://api.musicapi.com/api/${integrationUserUUID}/playlists/${playlist.id}/items`;
-    const secret = `${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`
-    const headers = {
-        'Accept': 'application/json',
-        'Authorization': "Basic " + Buffer.from(secret).toString('base64')
-    }
-    const songs = await axios.get(fetchPlaylistItemsUrl, { headers}).then(res => res.data.results);
+    const res = await invokeMusicAPI(fetchPlaylistItemsUrl);
+    const songs = res.results;
 
     // Import all the playlist's songs
     const songRefs = await Promise.all(songs.map(song => importSong(song)));
@@ -97,7 +88,7 @@ const importPlaylist = async (playlist, userId) => {
         name: playlist.name,
         description: "",
         totalItems: playlist.totalItems,
-        coverPhotoUrl: "",
+        coverPhotoUrl: "", //TODO: Add cover photo URL
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         createdBy: userRef,
         likesCount: 0

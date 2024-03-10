@@ -127,6 +127,15 @@ const getFollowRequests = async (userId) => {
     return requests;
 }
 
+const getProfilePictureUrl = async (userId) => {
+    const docRef = db.collection('users').doc(userId);
+    const docSnapshot = await docRef.get();
+    if (!docSnapshot.exists) {
+        throw new Error('User does not exist');
+    }
+    return docSnapshot.get('profilePictureUrl');
+}
+
 module.exports = {
     followUser,
     handleFollowRequest,
@@ -136,4 +145,5 @@ module.exports = {
     getFollowers,
     getFollowing,
     getFollowRequests,
+    getProfilePictureUrl,
 };

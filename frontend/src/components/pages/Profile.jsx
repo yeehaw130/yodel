@@ -1,4 +1,3 @@
-import React from 'react';
 import { BasicButton } from "../CommonStyles";
 import { auth, db } from "../../firebase";
 import { collection, query, where, getDocs, doc } from "firebase/firestore";
