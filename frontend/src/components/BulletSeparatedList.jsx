@@ -3,7 +3,7 @@ import { UnderText } from './CommonStyles';
 
 const BulletSeparatedList = ({ list, under }) => {
     return (
-        <div style={{paddingBottom: "20px"}}>
+        <div style={{paddingBottom: "20px", paddingTop: "20px"}}>
             {under ?
                 <>
                     {list.slice(0, list.length - 1).map((it) => (

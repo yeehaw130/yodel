@@ -19,8 +19,8 @@ const Playlist = ({ playlist }) => {
                 src={playlist.cover}
                 alt={playlist.title}
                 onDoubleClick={handleLike}
-                width="400px"
-                height="400px"
+                width="410px"
+                height="410px"
             />
             <PlaylistInfo playlist={playlist} />
         </div>
@@ -32,15 +32,24 @@ const PlaylistInfo = ({ playlist }) => {
         <div className="playlistInfo">
             <TitleText>{playlist.title}</TitleText>
             <span>{playlist.description}</span>
-            <BulletSeparatedList
-                list={[
-                    // playlist.creator.profilePicture,
-                    playlist.creator.name,
-                    playlist.songs.length + ' songs',
-                    playlist.duration,
-                    playlist.numLikes + ' likes'
-                ]}
-            />
+            <div style={{display: "flex", alignItems: "center"}}>
+                <img
+                    src={playlist.creator.profilePicture}
+                    alt={playlist.creator.name}
+                    width="25px"
+                    height="25px"
+                    style={{ borderRadius: "60%", paddingRight: "5px" }}
+                />
+                <BulletSeparatedList
+                    list={[
+                        // playlist.creator.profilePicture,
+                        playlist.creator.name,
+                        playlist.songs.length + ' songs',
+                        playlist.duration,
+                        playlist.numLikes + ' likes'
+                    ]}
+                />
+            </div>
             <SongList songs={playlist.songs} />
         </div>
     );
@@ -69,7 +78,7 @@ const Song = ({ song }) => {
             />
             <div>
                 <span>{song.title.substring(0, 12)}</span>
-                <span style={{ color: "#ffffff70"}}>{song.artist.substring(0, 8)}</span>
+                <span style={{ color: "#ffffff70" }}>{song.artist.substring(0, 8)}</span>
             </div>
             <span>{song.album}</span>
             <span>{song.duration}</span>
