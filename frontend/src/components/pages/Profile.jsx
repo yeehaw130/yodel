@@ -1,6 +1,6 @@
 import React from 'react';
 import { BasicButton } from "../CommonStyles";
-import { auth } from "../../firebase";
+import { useUserAuth } from "../../auth/Auth";
 import axios from "axios";
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -13,11 +13,14 @@ const Profile = () => {
   const [fetching, setFetching] = useState(false);
   const [uploadedPlaylists, setUploadedPlaylists] = useState([]);
   const { userId } = useParams();
+  const { user } = useUserAuth();
 
 
   useEffect(() => {
+    if (userId !== user.uid) return;
+    
     const fetchUploadedPlaylists = async () => {
-      const reqId = auth.currentUser.uid;
+      const reqId = user.uid;
 
       try {
         const playlistResponse = await axios.get(
@@ -32,7 +35,7 @@ const Profile = () => {
     };
 
     const fetchUserInformation = async () => {
-      const reqId = auth.currentUser.uid;
+      const reqId = user.uid;
       try {
         const userResponse = await axios.get(
           import.meta.env.VITE_BACKEND_URL + "/api/profile/" + userId,
@@ -50,7 +53,7 @@ const Profile = () => {
   }, []);
 
   const connectMusicService = () => {
-    const userId = auth.currentUser.uid;
+    const userId = user.uid;
     const returnUrl = import.meta.env.VITE_BACKEND_URL + "/api/auth/connectService/" + userId;
     window.location.href = "https://app.musicapi.com/yodel?returnUrl=" + returnUrl;
   }
@@ -58,7 +61,7 @@ const Profile = () => {
   const fetchPlaylists = async () => {
     setFetching(true);
     try {
-      const userId = auth.currentUser.uid;
+      const userId = user.uid;
       const playlistResponse = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/playlists/fetch/" + userId).then(res => res.data);
       setPlaylists(playlistResponse);
       setFetching(false);
@@ -70,7 +73,7 @@ const Profile = () => {
   const importPlaylist = async () => {
     if (!selectedPlaylist) return;
     try {
-      const userId = auth.currentUser.uid;
+      const userId = user.uid;
       const playlist = playlists.find(p => p.id === selectedPlaylist);
       await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/playlists/import/' + userId, { playlist });
       setUploadedPlaylists(prev => [...prev, playlist]);
@@ -79,7 +82,8 @@ const Profile = () => {
     }
   };
 
-  if (userId !== auth.currentUser.uid) {
+  if (userId !== user.uid) {
+    console.log(userId, user.uid)
     return (
       <div className="profile-container">
         <h1>Profile Page</h1>
