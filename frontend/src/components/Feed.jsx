@@ -1,26 +1,6 @@
 import { useState, useEffect } from 'react';
 import Playlist from './Playlist';
-import styled from 'styled-components';
-import { TitleText } from './CommonStyles';
-
-const DividedList = styled.ul` 
-    list-style-type: none;
-    & > li {
-        padding-bottom: 30px;
-        padding-top: 30px;
-    }
-    & > li:not(:last-child) {
-        border-bottom: 1px solid #e1e1e1; 
-    }
-`;
-
-const FeedContainer = styled.div`
-    text-align: start;
-    background-color: #121212;
-    padding: 65px;
-    padding-top: 30px;
-    border-radius: 12px;
-`;
+import { TitleText, DividedList, Widget } from './CommonStyles';
 
 const Feed = () => {
     const [playlists, setPlaylists] = useState([]);
@@ -196,7 +176,7 @@ const Feed = () => {
     }, []);
 
     return (
-        <FeedContainer>
+        <Widget style={{ flex: 2}}>
             <TitleText>For you</TitleText>
             <DividedList>
                 {playlists.map((playlist, i) => (
@@ -207,8 +187,7 @@ const Feed = () => {
                     </li>
                 ))}
             </DividedList>
-
-        </FeedContainer>
+        </Widget>
     );
 };
 

@@ -33,8 +33,6 @@ router.get('/fetch/:userId', async (req, res) => {
         const result = await playlistService.fetchPlaylists(userId);
         res.json(result);
     } catch (error) {
-        console.log(Object.keys(error));
-        console.log(Object.keys(error.response.data.message));
         res.status(500).send(error.response.data.message)
     }
 });
