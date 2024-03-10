@@ -112,5 +112,16 @@ router.get('/profilepicture/:userId', async (req, res) => {
     }
 });
 
+// GET user profile information
+router.get('/:userId', async (req, res) => {   
+    try {
+        const userId = req.params.userId;
+        const user = await socialService.getUser(userId);
+        res.json(user);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
 
 module.exports = router;

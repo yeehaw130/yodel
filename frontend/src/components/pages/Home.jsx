@@ -607,15 +607,14 @@ const Home = () => {
   });
 
   useEffect(() => {
-    const getProfilePicture = async () => {
+    const getUser = async () => {
       // fetch user data
       const userId = auth.currentUser.uid;
-      const profilePictureUrl = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/social/profilepicture/" + userId).then(res => res.data);
-      console.log(profilePictureUrl);
+      const userInfo = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/social/" + userId).then(res => res.data);
 
-      setUser({...user, profilePictureUrl})
+      setUser({...user, ...userInfo})
     }
-    getProfilePicture();
+    getUser();
   }, []);
 
   return (

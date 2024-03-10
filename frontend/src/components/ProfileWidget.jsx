@@ -22,7 +22,7 @@ const ProfileWidget = ({ user }) => {
             />
             <ProfileInfo>
                 <span>Profile</span>
-                <TitleText>{user.name}</TitleText>
+                <TitleText>{user.username ? user.username : "..."}</TitleText>
                 <BulletSeparatedList list={[
                     user.playlists.length + " playlists",
                     user.friends.length + " friends",
