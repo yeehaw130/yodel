@@ -132,6 +132,8 @@ const Home = () => {
       }
     ]
   });
+  const [userPlaylists, setPlaylists] = useState([]);
+  const [feed, setFeed] = useState([]);
 
   useEffect(() => {
     const getUser = async () => {
@@ -140,8 +142,12 @@ const Home = () => {
       const userInfo = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/social/" + userId).then(res => res.data);
 
       const playlists = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/playlists/get/" + userId).then(res => res.data);
-                                     
-      setUser({...user, ...userInfo, playlists})
+      setPlaylists(playlists);
+
+      const feed = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/playlists/feed/" + userId).then(res => res.data);
+      setFeed(feed);           
+      
+      setUser({...user, ...userInfo})
     }
     getUser();
   }, []);
@@ -150,9 +156,9 @@ const Home = () => {
     <HomeContainer>
       <WidgetColumn>
         <UtilityWidget />
-        <LibraryWidget playlists={user.playlists} />
+        <LibraryWidget playlists={userPlaylists} />
       </WidgetColumn>
-      <Feed playlists={user.playlists} />
+      <Feed playlists={feed} />
       <WidgetColumn>
         <ProfileWidget user={user} />
         <FriendsWidget friends={user.friends} />

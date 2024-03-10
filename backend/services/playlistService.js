@@ -131,13 +131,13 @@ const importPlaylist = async (playlist, userId) => {
 };
 
 // get user playlists object with song details from firestore
-const getUserPlaylists = async (userId) => {
+const getUserPlaylists = async (userId, feed) => {
     const userRef = db.collection('users').doc(userId);
     const userSnapshot = await userRef.get();
     if (!userSnapshot.exists) {
         throw new Error('User does not exist');
     }
-    const userPlaylists = await db.collection('playlists').where('createdBy', '==', userRef).get();
+    const userPlaylists = await db.collection('playlists').where('createdBy', feed ? '!=' : '==', userRef).get();
     const playlists = await Promise.all(userPlaylists.docs.map(async doc => {
         let pl = { id: doc.id, ...doc.data() };
 
