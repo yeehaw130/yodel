@@ -23,7 +23,7 @@ function App() {
 						<Home rerenderFeed={rerenderFeed} onChange={handleChange} />
 					</PrivateView>
 				} />
-				<Route path="/profile/:username" element={
+				<Route path="/profile/:userId" element={
 					<PrivateView>
 						<Profile rerenderFeed={rerenderFeed} onChange={handleChange} />
 					</PrivateView>

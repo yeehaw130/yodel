@@ -18,6 +18,8 @@ POST /social/follow
 POST /social/unfolow
 POST /social/acceptfollow
 POST /social/rejectfollow
+GET /social/followingStatus
+GET /social/requests/{userId}
 GET /social/followers/{userId}
 GET /social/following/{userId}
 POST /social/share

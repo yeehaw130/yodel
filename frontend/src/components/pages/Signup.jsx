@@ -16,7 +16,7 @@ const Signup = () => {
 	}
 	
 	// Redirect to home if user is already logged in
-	if (user) {
+	else if (user) {
 		navigate("/");
 	}
 
@@ -25,7 +25,7 @@ const Signup = () => {
 		setError("");
 		try {
 			await signUp(email, username, password);
-			navigate("/login");
+			navigate("/");
 		} catch (err) {
 			setError(err.message);
 			console.error(err);

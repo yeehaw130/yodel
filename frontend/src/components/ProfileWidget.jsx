@@ -31,7 +31,7 @@ const ProfileWidget = ({ user }) => {
     return (
         <Widget
             className="selectable"
-            onClick={() => navigate(`/profile/${userAuth.email}`)}
+            onClick={() => navigate(`/profile/${userAuth.uid}`)}
             styles={{
                 display: "flex",
                 flexDirection: "row",

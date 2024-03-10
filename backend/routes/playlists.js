@@ -50,17 +50,6 @@ router.post('/import/:userId', async (req, res) => {
     }
 });
 
-// GET all user playlists object
-router.get('/get/:userId', async (req, res) => {
-    try {
-        const { userId } = req.params;
-        const result = await playlistService.getUserPlaylists(userId, false);
-        res.json(result);
-    } catch (error) {
-        res.status(500).send(error);
-    }
-});
-
 // GET feed for user
 router.get('/feed/:userId', async (req, res) => {
     try {
