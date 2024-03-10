@@ -49,7 +49,7 @@ const ProfileWidget = ({ user }) => {
                 <span>Profile</span>
                 <TitleText>{user.username ? user.username : "..."}</TitleText>
                 <BulletSeparatedList list={[
-                    user.playlists.length + " playlists",
+                    user.playlistCount + " playlists",
                     user.friends.length + " friends",
                 ]} />
             </ProfileInfo>

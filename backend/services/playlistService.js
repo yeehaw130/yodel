@@ -2,7 +2,7 @@
 const { admin, db } = require('../config/firebaseConfig');
 const axios = require('axios');
 require('dotenv').config();
-const { invokeMusicAPI } = require('./services');
+const { invokeMusicAPI, invokeSpotifyAPI } = require('./services');
 
 const likePlaylist = async (userId, playlistId) => {
     // Logic to like a playlist
@@ -22,7 +22,7 @@ const fetchPlaylists = async (userId) => {
     if (!integrationUserUUID) {
         throw new Error('Integration user UUID is missing');
     }
-    const fetchPlaylistsUrl = `https://api.musicapi.com/api/${integrationUserUUID}/playlists`;
+    const fetchPlaylistsUrl = `${integrationUserUUID}/playlists`;
     const res = await invokeMusicAPI(fetchPlaylistsUrl);
     return res.results;
 };
@@ -82,21 +82,28 @@ const importPlaylist = async (playlist, userId) => {
     if (!integrationUserUUID) {
         throw new Error('Integration user UUID is missing');
     }
-    const fetchPlaylistItemsUrl = `https://api.musicapi.com/api/${integrationUserUUID}/playlists/${playlist.id}/items`;
+    const fetchPlaylistItemsUrl = `${integrationUserUUID}/playlists/${playlist.id}/items`;
     const res = await invokeMusicAPI(fetchPlaylistItemsUrl);
     const songs = res.results;
 
     // Import all the playlist's songs
     const songRefs = await Promise.all(songs.map(song => importSong(song)));
 
-    //TODO: load cover photo and description
+    //load cover photo and description from spotify if applicable
+    //TODO: if applicable
+    const spotifyPlaylistUrl = `playlists/${playlist.id}`;
+    const spotifyPlaylist = await invokeSpotifyAPI(spotifyPlaylistUrl, integrationUserUUID);
+    const description = spotifyPlaylist.description;
+    const coverPhotoUrl = spotifyPlaylist.images[0].url;
+
+    console.log(description, coverPhotoUrl);
 
     const playlistRef = db.collection('playlists').doc(playlist.id);
     await playlistRef.set({
         name: playlist.name,
-        description: "lorem ipsum dorem sit amet description here", //TODO: Add description
+        description: description,
         totalItems: playlist.totalItems,
-        coverPhotoUrl: "", //TODO: Add cover photo URL
+        coverPhotoUrl: coverPhotoUrl,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         createdBy: userRef,
         likesCount: 0

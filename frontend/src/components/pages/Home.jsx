@@ -27,28 +27,29 @@ const Home = () => {
   const [user, setUser] = useState({
     username: "username",
     profilePictureUrl: "../../img/pig.jpeg",
-    playlists: [
-      {
-        createdBy: {
-          username: "Creator 1",
-          profilePictureUrl: "../../img/pig.jpeg"
-        },
-        coverPhotoUrl: "../../img/pig.jpeg",
-        name: "Playlist 1",
-        description: "lorem ipsum dolor sit amet playlist description here",
-        likesCount: 10,
-        duration: "30m 31s",
-        songs: [
-          {
-            name: "Song 1",
-            artists: ["Artist 1"],
-            imageUrl: "../../img/pig.jpeg",
-            album: "Album 1",
-            duration: "3:00"
-          },
-        ]
-      },
-    ],
+    playlistCount: 0,
+    // playlists: [
+    //   {
+    //     createdBy: {
+    //       username: "Creator 1",
+    //       profilePictureUrl: "../../img/pig.jpeg"
+    //     },
+    //     coverPhotoUrl: "../../img/pig.jpeg",
+    //     name: "Playlist 1",
+    //     description: "lorem ipsum dolor sit amet playlist description here",
+    //     likesCount: 10,
+    //     duration: "30m 31s",
+    //     songs: [
+    //       {
+    //         name: "Song 1",
+    //         artists: ["Artist 1"],
+    //         imageUrl: "../../img/pig.jpeg",
+    //         album: "Album 1",
+    //         duration: "3:00"
+    //       },
+    //     ]
+    //   },
+    // ],
     friends: [
       {
         name: "Friend 1",
@@ -147,7 +148,7 @@ const Home = () => {
       const feed = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/playlists/feed/" + userId).then(res => res.data);
       setFeed(feed);           
       
-      setUser({...user, ...userInfo})
+      setUser({...user, ...userInfo, playlistCount: playlists.length});
     }
     getUser();
   }, []);

@@ -44,7 +44,7 @@ const LibraryEntry = ({ entry: entry }) => {
                 <span style={{
                     fontSize: "20px",
                 }}>
-                    {entry.name.length > 35 ? entry.name.substring(0, 35).trimEnd() + "..." : entry.name}
+                    {entry.name.length > 30 ? entry.name.substring(0, 30).trimEnd() + "..." : entry.name}
                 </span>
                 <BulletSeparatedList style={{ paddingTop: "5px" }}
                     list={[
