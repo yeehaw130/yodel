@@ -16,7 +16,7 @@ const Signup = () => {
 	}
 	
 	// Redirect to home if user is already logged in
-	if (user) {
+	else if (user) {
 		navigate("/");
 	}
 

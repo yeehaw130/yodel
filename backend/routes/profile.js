@@ -6,8 +6,7 @@ const profileService = require('../services/profileService');
 router.get('/playlists/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
-        const reqId = req.body.userId;
-        const playlists = await profileService.getUserPlaylists(userId, reqId);
+        const playlists = await profileService.getUserPlaylists(userId);
         res.json(playlists);
     } catch (error) {
         res.status(500).send(error.message);
@@ -18,8 +17,7 @@ router.get('/playlists/:userId', async (req, res) => {
 router.get('/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
-        const reqId = req.body.userId;
-        const result = await profileService.getUserInfo(userId, reqId);
+        const result = await profileService.getUserInfo(userId);
         res.json(result);
     } catch (error) {
         res.status(500).send(error.message)

@@ -12,20 +12,39 @@ const Profile = () => {
   const [selectedPlaylist, setSelectedPlaylist] = useState('');
   const [fetching, setFetching] = useState(false);
   const [uploadedPlaylists, setUploadedPlaylists] = useState([]);
+  const [userInformation, setUserInformation] = useState({});
+  const [followingStatus, setFollowingStatus] = useState("none");
+  const [isMe, setIsMe] = useState(false);
   const { userId } = useParams();
   const { user } = useUserAuth();
 
 
   useEffect(() => {
-    if (userId !== user.uid) return;
-    
-    const fetchUploadedPlaylists = async () => {
+    const whoIsThis = async () => {
+      if (userId === user.uid) {
+        setIsMe(true);
+        return;
+      }
       const reqId = user.uid;
+      try {
+        const response = await axios.get(
+          import.meta.env.VITE_BACKEND_URL + "/api/social/followingStatus/",
+          { params: { userId: reqId, targetUserId: userId } }
+        ).then(res => res.data);
+        setFollowingStatus(response.data);
+      }
+      catch (error) {
+        throw new Error("Failed to check if following: " + (error.response?.data || error.message));
+      }
+    };
 
+    const fetchUploadedPlaylists = async () => {
+      if (!isMe && followingStatus !== "active" && !userInformation.isPublic) {
+        return;
+      }
       try {
         const playlistResponse = await axios.get(
-          import.meta.env.VITE_BACKEND_URL + "/api/profile/playlists" + userId,
-          { params: { reqId: reqId } }
+          import.meta.env.VITE_BACKEND_URL + "/api/profile/playlists/" + userId,
         ).then(res => res.data);
         setUploadedPlaylists(playlistResponse);
       }
@@ -35,21 +54,21 @@ const Profile = () => {
     };
 
     const fetchUserInformation = async () => {
-      const reqId = user.uid;
       try {
         const userResponse = await axios.get(
           import.meta.env.VITE_BACKEND_URL + "/api/profile/" + userId,
-          { params: { reqId: reqId } }
         ).then(res => res.data);
-        console.log(userResponse);
+        setUserInformation(userResponse);
       }
       catch (error) {
         throw new Error("Failed to fetch user information: " + (error.response?.data || error.message));
       }
-    }
-    
+    };
+
     fetchUserInformation();
+    whoIsThis();
     fetchUploadedPlaylists();
+    console.log(userInformation);
   }, []);
 
   const connectMusicService = () => {
@@ -82,56 +101,133 @@ const Profile = () => {
     }
   };
 
-  if (userId !== user.uid) {
-    console.log(userId, user.uid)
-    return (
-      <div className="profile-container">
-        <h1>Profile Page</h1>
-        <h2>Viewing someone else's profile</h2>
-        {/* TODO just show user info */}
-      </div>
-    );
+  const playlistsDiv = () => {
+    if (isMe || followingStatus === "active" || userInformation.isPublic) {
+      return (
+        <div>
+          <h2>Uploaded Playlists</h2>
+          <ul className="uploaded-playlists">
+            {uploadedPlaylists.map((playlist) => (
+              <li key={playlist.id} className="playlist-item">
+                <span className="playlist-name">{playlist.name}</span>
+                <span className="playlist-detail">{playlist.totalItems} songs</span>
+                <span className="playlist-detail">{(playlist.likesCount || 0) + ' likes'}</span>
+                <span className="playlist-description">{playlist.description}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+    else {
+      return <h2>User profile is private</h2>
+    }
+  };
+
+  const followUser = async () => {
+    const reqId = user.uid;
+    try {
+      await axios.post(
+        import.meta.env.VITE_BACKEND_URL + "/api/social/follow/",
+        { userId: reqId, targetUserId: userId }
+      );
+      if (userInformation.isPublic) {
+        setFollowingStatus("active");
+      }
+      else {
+        setFollowingStatus("pending");
+      }
+    }
+    catch (error) {
+      throw new Error("Failed to follow user: " + (error.response?.data || error.message));
+    }
   }
+
+  const unfollowUser = async () => {
+    const reqId = user.uid;
+    try {
+      await axios.post(
+        import.meta.env.VITE_BACKEND_URL + "/api/social/unfollow/",
+        { userId: reqId, targetUserId: userId }
+      );
+      setFollowingStatus("none");
+    }
+    catch (error) {
+      throw new Error("Failed to unfollow user: " + (error.response?.data || error.message));
+    }
+  }
+
+  const followOrUnfollowOrEditButton = () => {
+    if (isMe) {
+      // return (
+      //   <BasicButton onClick={() => window.location.href = "/editprofile"}>Edit Profile</BasicButton>
+      // );
+      return null;
+    }
+    else if (followingStatus === "active") {
+      return (
+        <BasicButton onClick={unfollowUser}>Unfollow</BasicButton>
+      );
+    }
+    else if (followingStatus === "pending") {
+      return (
+        <BasicButton onClick={unfollowUser}>Requested</BasicButton>
+      );
+    }
+    else {
+      return (
+        <BasicButton onClick={followUser}>Follow</BasicButton>
+      );
+    }
+  }
+
+  const controlsRow = (
+    <div className="controls-row">
+      <BasicButton onClick={connectMusicService}>
+        Connect to Music Service
+      </BasicButton>
+      <BasicButton onClick={fetchPlaylists} disabled={fetching}>
+        {fetching ? 'Fetching Playlists...' : 'Upload Playlists'}
+      </BasicButton>
+      {playlists.length > 0 && (
+        <>
+          <select value={selectedPlaylist} onChange={(e) => setSelectedPlaylist(e.target.value)} className="playlist-dropdown">
+            <option value="">Select a playlist</option>
+            {playlists.map(playlist => (
+              <option key={playlist.id} value={playlist.id}>{playlist.name}</option>
+            ))}
+          </select>
+          <BasicButton onClick={importPlaylist} disabled={!selectedPlaylist}>
+            Upload Selected Playlist
+          </BasicButton>
+        </>
+      )}
+    </div>
+  )
 
   return (
     <div className="profile-container">
-      <h1>Profile Page</h1>
-      <div className="controls-row">
-        <BasicButton onClick={connectMusicService}>
-          Connect to Music Service
-        </BasicButton>
-        <BasicButton onClick={fetchPlaylists} disabled={fetching}>
-          {fetching ? 'Fetching Playlists...' : 'Upload Playlists'}
-        </BasicButton>
-        {playlists.length > 0 && (
-          <>
-            <select value={selectedPlaylist} onChange={(e) => setSelectedPlaylist(e.target.value)} className="playlist-dropdown">
-              <option value="">Select a playlist</option>
-              {playlists.map(playlist => (
-                <option key={playlist.id} value={playlist.id}>{playlist.name}</option>
-              ))}
-            </select>
-            <BasicButton onClick={importPlaylist} disabled={!selectedPlaylist}>
-              Upload Selected Playlist
-            </BasicButton>
-          </>
-        )}
+      <div className="user-info">
+        {/* <div className="profile-picture">
+          <img src={userInformation.profilePictureUrl} alt="Profile Picture" />
+        </div>
+        <div className="profile-details">
+          <h2>{userInformation.username}</h2>
+          <p>{userInformation.bio}</p>
+          {followOrUnfollowOrEditButton()}
+        </div> */}
+
+        <div className="profile-picture">
+          <img src="https://i.scdn.co/image/ab67757000003b828d74f661a47450a54ee755f2" alt="Profile Picture" />
+        </div>
+        <div className="profile-details">
+          <h2>seongbin</h2>
+          <p>welcome to my world</p>
+          {followOrUnfollowOrEditButton()}
+        </div>
       </div>
-      {uploadedPlaylists.length > 0 && (
-      <div>
-        <h2>Uploaded Playlists</h2>
-        <ul className="uploaded-playlists">
-          {uploadedPlaylists.map((playlist) => (
-            <li key={playlist.id} className="playlist-item">
-              <span className="playlist-name">{playlist.name}</span>
-              <span className="playlist-detail">{playlist.totalItems} songs</span>
-              <span className="playlist-detail">{(playlist.likesCount || 0) + ' likes'}</span>
-              <span className="playlist-description">{playlist.description}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )}
+      {isMe && controlsRow}
+      {playlistsDiv()}
     </div>
   );  
 };
