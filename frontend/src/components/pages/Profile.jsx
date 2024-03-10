@@ -1,4 +1,3 @@
-import React from 'react';
 import { BasicButton } from "../CommonStyles";
 import { auth, db } from "../../firebase";
 import { collection, query, where, getDocs, doc } from "firebase/firestore";
@@ -46,8 +45,8 @@ const Profile = () => {
       setPlaylists(playlistResponse);
       setFetching(false);
     } catch (error) {
-      throw new Error("Failed to fetch playlists: " + (error.response?.data || error.message));
       setFetching(false);
+      throw new Error("Failed to fetch playlists: " + (error.response?.data || error.message));
     }
   }
   

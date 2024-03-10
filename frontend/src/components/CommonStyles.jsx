@@ -34,3 +34,43 @@ export const ErrorMessage = styled.div`
     position: absolute;
     bottom: 10px;
 `;
+
+export const TitleText = styled.span`
+	font-size: 48px;
+	font-weight: bold;
+	line-height: 1.3;
+	${props => props.styles}
+`;
+
+export const SubtitleText = styled.span`
+	font-size: 28px;
+	font-weight: bold;
+	${props => props.styles}
+`;
+
+export const UnderText = styled.span`
+	color: #ffffff70;
+	${props => props.styles}
+`;
+
+export const DividedList = styled.ul` 
+    list-style-type: none;
+    & > li {
+        padding-bottom: 30px;
+        padding-top: 30px;
+    }
+    & > li:not(:last-child) {
+        border-bottom: 1px solid #ffffff50; 
+    }
+	${props => props.styles}
+`;
+
+export const Widget = styled.div`
+    text-align: start;
+    background-color: #121212;
+    padding: 30px;
+    border-radius: 12px;
+    margin: 15px 15px 0px 0px;
+	flex-grow: 1;
+	${props => props.styles}
+`;

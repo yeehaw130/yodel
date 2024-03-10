@@ -1,6 +1,7 @@
 const admin = require('firebase-admin');
 // service account file
-const serviceAccount = require('./firebaseServiceAccount.json');
+const serviceAccount = require('./yodel-temp-firebase.json'); //temp firebase bc read limit reached today
+// const serviceAccount = require('./firebaseServiceAccount.json'); 
 
 // Prevents reinitializing the app
 if (admin.apps.length === 0) {
