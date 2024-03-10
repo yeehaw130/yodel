@@ -1,21 +1,25 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable react/prop-types */
 import Playlist from './Playlist';
+import { TitleText, DividedList, Widget } from './CommonStyles';
 
-const Feed = () => {
-    const [playlists, setPlaylists] = useState([]);
-
-    useEffect(() => {
-        // Fetch posts from the server or API
-        // and update the state with the fetched data
-    }, []);
-
+const Feed = ({playlists}) => {
     return (
-        <div>
-            <h1>Feed</h1>
-            {playlists.map((playlist) => (
-                <Playlist key={playlist.id} playlist={playlist} />
-            ))}
-        </div>
+        <Widget style={{ 
+            flex: 2,
+            overflow: "auto",
+            height: "93vh",
+         }}>
+            <TitleText>For you</TitleText>
+            <DividedList>
+                {playlists.map((playlist, i) => (
+                    <li key={i}>
+                        <Playlist
+                            playlist={playlist}
+                        />
+                    </li>
+                ))}
+            </DividedList>
+        </Widget>
     );
 };
 

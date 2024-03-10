@@ -128,6 +128,15 @@ const getFollowRequests = async (userId) => {
     return requests;
 }
 
+const getUser = async (userId) => {
+    const docRef = db.collection('users').doc(userId);
+    const docSnapshot = await docRef.get();
+    if (!docSnapshot.exists) {
+        throw new Error('User does not exist');
+    }
+    return docSnapshot.data();
+}
+
 const followingStatus = async (userId, targetUserId) => {
     const followId = userId + targetUserId;
     const followDocRef = db.collection('follows').doc(followId);
@@ -147,5 +156,6 @@ module.exports = {
     getFollowers,
     getFollowing,
     getFollowRequests,
+    getUser,
     followingStatus
 };

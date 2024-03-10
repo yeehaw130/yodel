@@ -17,8 +17,8 @@ const getUserInfo = async (userId) => {
     if (!userSnapshot.exists) {
         throw new Error('User document does not exist');
     }
-    const { username, bio, profilePicture, isPublic } = userSnapshot.data();
-    return { username, bio, profilePicture, isPublic };
+    const { username, bio, profilePictureUrl, isPublic } = userSnapshot.data();
+    return { username, bio, profilePictureUrl, isPublic };
 }
 
 

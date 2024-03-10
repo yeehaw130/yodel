@@ -1,6 +1,7 @@
 // authService.js
 
 const { admin, db } = require('../config/firebaseConfig');
+const { invokeMusicAPI } = require('./services');
 
 const validateUsername = async (username) => {
     const user = await db.collection('users').where('username', '==', username).get();
@@ -36,8 +37,11 @@ const connectMusicService = async (userId, data64) => {
     const jsonObject = JSON.parse(jsonString);
     const { integrationUserUUID } = jsonObject;
     
+    const { imageUrl } = await invokeMusicAPI(`${integrationUserUUID}/users/profile`);
+
     await db.collection('users').doc(userId).update({
-        integrationUserUUID
+        integrationUserUUID, 
+        profilePictureUrl: imageUrl
     })
 }
 

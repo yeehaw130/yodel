@@ -1,4 +1,3 @@
-import React from 'react';
 import { BasicButton } from "../CommonStyles";
 import { useUserAuth } from "../../auth/Auth";
 import axios from "axios";
@@ -68,7 +67,6 @@ const Profile = () => {
     fetchUserInformation();
     whoIsThis();
     fetchUploadedPlaylists();
-    console.log(userInformation);
   }, []);
 
   const connectMusicService = () => {
@@ -85,6 +83,7 @@ const Profile = () => {
       setPlaylists(playlistResponse);
       setFetching(false);
     } catch (error) {
+      setFetching(false);
       throw new Error("Failed to fetch playlists: " + (error.response?.data || error.message));
     }
   }
@@ -205,26 +204,27 @@ const Profile = () => {
     </div>
   )
 
+  console.log(userInformation)
   return (
     <div className="profile-container">
       <div className="user-info">
-        {/* <div className="profile-picture">
+        <div className="profile-picture">
           <img src={userInformation.profilePictureUrl} alt="Profile Picture" />
         </div>
         <div className="profile-details">
           <h2>{userInformation.username}</h2>
           <p>{userInformation.bio}</p>
           {followOrUnfollowOrEditButton()}
-        </div> */}
+        </div>
 
-        <div className="profile-picture">
+        {/* <div className="profile-picture">
           <img src="https://i.scdn.co/image/ab67757000003b828d74f661a47450a54ee755f2" alt="Profile Picture" />
         </div>
         <div className="profile-details">
           <h2>seongbin</h2>
           <p>welcome to my world</p>
           {followOrUnfollowOrEditButton()}
-        </div>
+        </div> */}
       </div>
       {isMe && controlsRow}
       {playlistsDiv()}

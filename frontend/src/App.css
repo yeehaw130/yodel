@@ -1,6 +1,7 @@
 #root {
-  width: 100%;
-  margin: 0 auto;
+  margin: 0;
+  padding: 0px 0px 15px 15px;
+  width: 100vw;
   text-align: center;
 }
 
@@ -38,4 +39,16 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 20ch;
+}
+
+.selectable:hover {
+  cursor: pointer;
+  background-color: #2b2b2b;
 }
