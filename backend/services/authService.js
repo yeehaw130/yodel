@@ -37,7 +37,7 @@ const connectMusicService = async (userId, data64) => {
     const jsonObject = JSON.parse(jsonString);
     const { integrationUserUUID } = jsonObject;
     
-    const { imageUrl}= await invokeMusicAPI(`https://api.musicapi.com/api/${integrationUserUUID}/users/profile`);
+    const { imageUrl } = await invokeMusicAPI(`${integrationUserUUID}/users/profile`);
 
     await db.collection('users').doc(userId).update({
         integrationUserUUID, 

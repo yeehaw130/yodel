@@ -20,16 +20,13 @@ const getOriginalToken = async (userModelUUID) => {
         'Authorization': "Basic " + Buffer.from(secret).toString('base64')
     };
 
-    console.log("https://api.musicapi.com/public/integrations/user/" + userModelUUID);
     const res = await axios.get("https://api.musicapi.com/public/integrations/user/" + userModelUUID, { headers }).then(res => res.data.integrationUser.authData.accessToken);
-    console.log(res);
     return res;
 };
 
 // Spotify API call
 const invokeSpotifyAPI = async (url, userModelUUID) => {
     const token = await getOriginalToken(userModelUUID);
-    console.log("token: " + token);
 
     const headers = {
         'Accept': 'application/json',

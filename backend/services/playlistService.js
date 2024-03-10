@@ -93,10 +93,11 @@ const importPlaylist = async (playlist, userId) => {
     //TODO: if applicable
     const spotifyPlaylistUrl = `playlists/${playlist.id}`;
     const spotifyPlaylist = await invokeSpotifyAPI(spotifyPlaylistUrl, integrationUserUUID);
-    const description = spotifyPlaylist.description;
-    const coverPhotoUrl = spotifyPlaylist.images[0].url;
-
-    console.log(description, coverPhotoUrl);
+    const description = "";
+    const coverPhotoUrl = "";
+    if (spotifyPlaylist) {
+        const coverPhotoUrl = (spotifyPlaylist.images && spotifyPlaylist.images.length) ? spotifyPlaylist.images[0].url : "";
+    }
 
     const playlistRef = db.collection('playlists').doc(playlist.id);
     await playlistRef.set({
