@@ -49,4 +49,15 @@ router.post('/import/:userId', async (req, res) => {
     }
 });
 
+// GET all user playlists object
+router.get('/get/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const result = await playlistService.getUserPlaylists(userId);
+        res.json(result);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
 module.exports = router;

@@ -16,8 +16,8 @@ const Playlist = ({ playlist }) => {
     return (
         <div className="playlist">
             <img
-                src={playlist.cover}
-                alt={playlist.title}
+                src={playlist.coverPhotoUrl ? playlist.coverPhotoUrl : "../../img/pig.jpeg"}
+                alt={playlist.name}
                 onDoubleClick={handleLike}
                 width="410px"
                 height="410px"
@@ -30,23 +30,22 @@ const Playlist = ({ playlist }) => {
 const PlaylistInfo = ({ playlist }) => {
     return (
         <div className="playlistInfo">
-            <TitleText>{playlist.title}</TitleText>
-            <span>{playlist.description}</span>
+            <TitleText>{playlist.name}</TitleText>
+            <span>{playlist.description ? playlist.description : "No description."}</span>
             <div style={{display: "flex", alignItems: "center"}}>
                 <img
-                    src={playlist.creator.profilePicture}
-                    alt={playlist.creator.name}
+                    src={playlist.createdBy.profilePictureUrl ? playlist.createdBy.profilePictureUrl : "../../img/pig.jpeg"}
+                    alt={playlist.createdBy.username}
                     width="25px"
                     height="25px"
                     style={{ borderRadius: "60%", paddingRight: "5px" }}
                 />
                 <BulletSeparatedList
                     list={[
-                        // playlist.creator.profilePicture,
-                        playlist.creator.name,
+                        playlist.createdBy.username,
                         playlist.songs.length + ' songs',
                         playlist.duration,
-                        playlist.numLikes + ' likes'
+                        playlist.likesCount + ' likes'
                     ]}
                 />
             </div>
@@ -71,16 +70,16 @@ const Song = ({ song }) => {
     return (
         <div className="song">
             <img
-                src={song.cover}
-                alt={song.title}
+                src={song.imageUrl ? song.imageUrl : "../../img/pig.jpeg"}
+                alt={song.name}
                 width="55px"
                 height="55px"
             />
             <div>
-                <span>{song.title.substring(0, 12)}</span>
-                <span style={{ color: "#ffffff70" }}>{song.artist.substring(0, 8)}</span>
+                <span className="truncate">{song.name}</span>
+                <span style={{ color: "#ffffff70" }}>{song.artists}</span>
             </div>
-            <span>{song.album}</span>
+            <span className="truncate">{song.album}</span>
             <span>{song.duration}</span>
         </div>
     );

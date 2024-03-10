@@ -50,6 +50,12 @@ const importSong = async (song) => {
         totalItems: song.album.totalItems,
     }, { merge: true });
 
+    // compute readable duration in the format 0m 0s
+    song.duration = song.duration / 1000;
+    const minutes = Math.floor(song.duration / 60);
+    const seconds = Math.floor(song.duration - minutes * 60);
+    song.duration = `${minutes}m ${seconds}s`;
+
     // Import song with references to its album and artists
     const songRef = db.collection('songs').doc(song.id);
     await songRef.set({
@@ -83,10 +89,12 @@ const importPlaylist = async (playlist, userId) => {
     // Import all the playlist's songs
     const songRefs = await Promise.all(songs.map(song => importSong(song)));
 
+    //TODO: load cover photo and description
+
     const playlistRef = db.collection('playlists').doc(playlist.id);
     await playlistRef.set({
         name: playlist.name,
-        description: "",
+        description: "lorem ipsum dorem sit amet description here", //TODO: Add description
         totalItems: playlist.totalItems,
         coverPhotoUrl: "", //TODO: Add cover photo URL
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -105,6 +113,7 @@ const importPlaylist = async (playlist, userId) => {
         existingSongIds.add(songRef.id);
     });
 
+
     // Link new songs to the playlist, excluding duplicates
     await Promise.all(songRefs.map(songRef => {
         if (!existingSongIds.has(songRef.id)) {
@@ -121,6 +130,61 @@ const importPlaylist = async (playlist, userId) => {
     return { message: 'Playlist imported successfully.' };
 };
 
+// get user playlists object with song details from firestore
+const getUserPlaylists = async (userId) => {
+    const userRef = db.collection('users').doc(userId);
+    const userSnapshot = await userRef.get();
+    if (!userSnapshot.exists) {
+        throw new Error('User does not exist');
+    }
+    const userPlaylists = await db.collection('playlists').where('createdBy', '==', userRef).get();
+    const playlists = await Promise.all(userPlaylists.docs.map(async doc => {
+        let pl = { id: doc.id, ...doc.data() };
+
+        // get playlist songs
+        const playlistSongs = await db.collection('playlistSongs').where('playlist', '==', doc.ref).get();
+
+        pl.songs = await Promise.all(playlistSongs.docs.map(async doc => {
+            let song = { id: doc.id, ...doc.data() };
+            const songDetails = await song.song.get();
+            song = { ...song, ...songDetails.data() };
+            return song;
+        }));
+
+        return pl;
+    }));
+
+
+    for (let pl of playlists) {
+        const createdBySnapshot = await pl.createdBy.get();
+        if (createdBySnapshot.exists) {
+            pl.createdBy = createdBySnapshot.data();
+        } else {
+            console.log('No such document!');
+        }
+        for (let song of pl.songs) {
+            const a = await song.album.get();
+
+            const artistSnapshot = await song.artists[0].get();
+            if (artistSnapshot.exists) {
+                song.artists = artistSnapshot.data().name;
+            } else {
+                console.log('No such document!');
+            }
+
+
+            const albumSnapshot = await song.album.get();
+            if (albumSnapshot.exists) {
+                song.album = albumSnapshot.data().name;
+            } else {
+                console.log('No such document!');
+            }
+            
+        }
+    }                                  
+
+    return playlists;
+};
 
 
 module.exports = {
@@ -128,4 +192,5 @@ module.exports = {
     unlikePlaylist,
     fetchPlaylists,
     importPlaylist,
+    getUserPlaylists,
 };

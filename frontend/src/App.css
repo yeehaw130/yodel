@@ -40,3 +40,10 @@
 .read-the-docs {
   color: #888;
 }
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 15ch;
+}

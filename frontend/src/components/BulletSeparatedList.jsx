@@ -6,15 +6,15 @@ const BulletSeparatedList = ({ list, under }) => {
         <div style={{paddingBottom: "20px", paddingTop: "20px"}}>
             {under ?
                 <>
-                    {list.slice(0, list.length - 1).map((it) => (
-                        <UnderText key={it}>{it} • </UnderText>
+                    {list.slice(0, list.length - 1).map((it, i) => (
+                        <UnderText key={i}>{it} • </UnderText>
                     ))}
                     <UnderText>{list[list.length - 1]}</UnderText>
                 </>
                 :
                 <>
-                    {list.slice(0, list.length - 1).map((it) => (
-                        <span key={it}>{it} • </span>
+                    {list.slice(0, list.length - 1).map((it, i) => (
+                        <span key={i}>{it} • </span>
                     ))}
                     <span>{list[list.length - 1]}</span>
                 </>

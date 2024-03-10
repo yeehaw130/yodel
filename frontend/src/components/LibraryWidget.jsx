@@ -35,8 +35,8 @@ const LibraryEntry = ({ entry: entry }) => {
             <img
                 src={entry.cover}
                 alt={entry.title}
-                width="60px"
-                height="60px"
+                width="70px"
+                height="70px"
                 style={{ borderRadius: "10%", marginRight: "15px" }}
             />
             <div>
@@ -49,7 +49,7 @@ const LibraryEntry = ({ entry: entry }) => {
                 </span>
                 <BulletSeparatedList
                     list={[
-                        entry.creator.name,
+                        entry.createdBy.username,
                         entry.songs.length + ' songs'
                     ]}
                     under
