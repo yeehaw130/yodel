@@ -17,8 +17,9 @@ const HomeContainer = styled.div`
 
 const WidgetColumn = styled.div`
   display: grid;
-  grid-template-rows: 1fr 6fr;
+  grid-template-rows: 1fr 7fr;
   flex: 1;
+
 `;
 
 const Home = () => {
@@ -26,9 +27,564 @@ const Home = () => {
     name: "username",
     profilePicture: "../../img/pig.jpeg",
     playlists: [
-      "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
+      {
+        creator: {
+          name: "Creator 1",
+          profilePicture: "../../img/pig.jpeg"
+        },
+        cover: "../../img/pig.jpeg",
+        title: "Playlist 1",
+        description: "lorem ipsum dolor sit amet playlist description here",
+        numLikes: 10,
+        duration: "30m 31s",
+        songs: [
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          },
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          }
+        ]
+      },
+      {
+        creator: {
+          name: "Creator 1",
+          profilePicture: "../../img/pig.jpeg"
+        },
+        cover: "../../img/pig.jpeg",
+        title: "Playlist 1",
+        description: "lorem ipsum dolor sit amet playlist description here",
+        numLikes: 10,
+        duration: "30m 31s",
+        songs: [
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          },
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          }
+        ]
+      },
+      {
+        creator: {
+          name: "Creator 1",
+          profilePicture: "../../img/pig.jpeg"
+        },
+        cover: "../../img/pig.jpeg",
+        title: "Playlist 1",
+        description: "lorem ipsum dolor sit amet playlist description here",
+        numLikes: 10,
+        duration: "30m 31s",
+        songs: [
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          },
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          }
+        ]
+      },
+      {
+        creator: {
+          name: "Creator 1",
+          profilePicture: "../../img/pig.jpeg"
+        },
+        cover: "../../img/pig.jpeg",
+        title: "Playlist 1",
+        description: "lorem ipsum dolor sit amet playlist description here",
+        numLikes: 10,
+        duration: "30m 31s",
+        songs: [
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          },
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          }
+        ]
+      },
+      {
+        creator: {
+          name: "Creator 1",
+          profilePicture: "../../img/pig.jpeg"
+        },
+        cover: "../../img/pig.jpeg",
+        title: "Playlist 1",
+        description: "lorem ipsum dolor sit amet playlist description here",
+        numLikes: 10,
+        duration: "30m 31s",
+        songs: [
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          },
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          }
+        ]
+      },
+      {
+        creator: {
+          name: "Creator 1",
+          profilePicture: "../../img/pig.jpeg"
+        },
+        cover: "../../img/pig.jpeg",
+        title: "Playlist 1",
+        description: "lorem ipsum dolor sit amet playlist description here",
+        numLikes: 10,
+        duration: "30m 31s",
+        songs: [
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          },
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          }
+        ]
+      },
+      {
+        creator: {
+          name: "Creator 1",
+          profilePicture: "../../img/pig.jpeg"
+        },
+        cover: "../../img/pig.jpeg",
+        title: "Playlist 1",
+        description: "lorem ipsum dolor sit amet playlist description here",
+        numLikes: 10,
+        duration: "30m 31s",
+        songs: [
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          },
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          }
+        ]
+      },
+      {
+        creator: {
+          name: "Creator 1",
+          profilePicture: "../../img/pig.jpeg"
+        },
+        cover: "../../img/pig.jpeg",
+        title: "Playlist 1",
+        description: "lorem ipsum dolor sit amet playlist description here",
+        numLikes: 10,
+        duration: "30m 31s",
+        songs: [
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          },
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          }
+        ]
+      },
+      {
+        creator: {
+          name: "Creator 1",
+          profilePicture: "../../img/pig.jpeg"
+        },
+        cover: "../../img/pig.jpeg",
+        title: "Playlist 1",
+        description: "lorem ipsum dolor sit amet playlist description here",
+        numLikes: 10,
+        duration: "30m 31s",
+        songs: [
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          },
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          }
+        ]
+      },
+      {
+        creator: {
+          name: "Creator 1",
+          profilePicture: "../../img/pig.jpeg"
+        },
+        cover: "../../img/pig.jpeg",
+        title: "Playlist 1",
+        description: "lorem ipsum dolor sit amet playlist description here",
+        numLikes: 10,
+        duration: "30m 31s",
+        songs: [
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          },
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          }
+        ]
+      },
+      {
+        creator: {
+          name: "Creator 1",
+          profilePicture: "../../img/pig.jpeg"
+        },
+        cover: "../../img/pig.jpeg",
+        title: "Playlist 1",
+        description: "lorem ipsum dolor sit amet playlist description here",
+        numLikes: 10,
+        duration: "30m 31s",
+        songs: [
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          },
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          }
+        ]
+      },
+      {
+        creator: {
+          name: "Creator 1",
+          profilePicture: "../../img/pig.jpeg"
+        },
+        cover: "../../img/pig.jpeg",
+        title: "Playlist 1",
+        description: "lorem ipsum dolor sit amet playlist description here",
+        numLikes: 10,
+        duration: "30m 31s",
+        songs: [
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          },
+          {
+            title: "Song 1",
+            artist: "Artist 1",
+            cover: "../../img/pig.jpeg",
+            album: "Album 1",
+            duration: "3:00"
+          },
+          {
+            title: "Song 2",
+            artist: "Artist 2",
+            cover: "../../img/pig.jpeg",
+            album: "Album 2",
+            duration: "3:00"
+          }
+        ]
+      }
     ],
     friends: [
+      {
+        name: "Friend 1",
+        profilePicture: "../../img/pig.jpeg"
+      },
+      {
+        name: "Friend 2",
+        profilePicture: "../../img/pig.jpeg"
+      },
+      {
+        name: "Friend 3",
+        profilePicture: "../../img/pig.jpeg"
+      },
+      {
+        name: "Friend 4",
+        profilePicture: "../../img/pig.jpeg"
+      },
+      {
+        name: "Friend 1",
+        profilePicture: "../../img/pig.jpeg"
+      },
+      {
+        name: "Friend 2",
+        profilePicture: "../../img/pig.jpeg"
+      },
+      {
+        name: "Friend 3",
+        profilePicture: "../../img/pig.jpeg"
+      },
+      {
+        name: "Friend 4",
+        profilePicture: "../../img/pig.jpeg"
+      },
+      {
+        name: "Friend 1",
+        profilePicture: "../../img/pig.jpeg"
+      },
+      {
+        name: "Friend 2",
+        profilePicture: "../../img/pig.jpeg"
+      },
+      {
+        name: "Friend 3",
+        profilePicture: "../../img/pig.jpeg"
+      },
+      {
+        name: "Friend 4",
+        profilePicture: "../../img/pig.jpeg"
+      },
+      {
+        name: "Friend 1",
+        profilePicture: "../../img/pig.jpeg"
+      },
+      {
+        name: "Friend 2",
+        profilePicture: "../../img/pig.jpeg"
+      },
+      {
+        name: "Friend 3",
+        profilePicture: "../../img/pig.jpeg"
+      },
+      {
+        name: "Friend 4",
+        profilePicture: "../../img/pig.jpeg"
+      },
       {
         name: "Friend 1",
         profilePicture: "../../img/pig.jpeg"
@@ -52,9 +608,9 @@ const Home = () => {
     <HomeContainer>
       <WidgetColumn>
         <UtilityWidget />
-        <LibraryWidget />
+        <LibraryWidget playlists={user.playlists} />
       </WidgetColumn>
-      <Feed />
+      <Feed playlists={user.playlists} />
       <WidgetColumn>
         <ProfileWidget user={user} />
         <FriendsWidget friends={user.friends} />

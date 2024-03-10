@@ -69,7 +69,7 @@ const Song = ({ song }) => {
             />
             <div>
                 <span>{song.title.substring(0, 12)}</span>
-                <span>{song.artist.substring(0, 8)}</span>
+                <span style={{ color: "#ffffff70"}}>{song.artist.substring(0, 8)}</span>
             </div>
             <span>{song.album}</span>
             <span>{song.duration}</span>

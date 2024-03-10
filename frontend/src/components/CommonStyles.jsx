@@ -38,6 +38,18 @@ export const ErrorMessage = styled.div`
 export const TitleText = styled.span`
 	font-size: 48px;
 	font-weight: bold;
+	${props => props.styles}
+`;
+
+export const SubtitleText = styled.span`
+	font-size: 28px;
+	font-weight: bold;
+	${props => props.styles}
+`;
+
+export const UnderText = styled.span`
+	color: #ffffff70;
+	${props => props.styles}
 `;
 
 export const DividedList = styled.ul` 
@@ -49,6 +61,7 @@ export const DividedList = styled.ul`
     & > li:not(:last-child) {
         border-bottom: 1px solid #ffffff50; 
     }
+	${props => props.styles}
 `;
 
 export const Widget = styled.div`
@@ -58,4 +71,5 @@ export const Widget = styled.div`
     border-radius: 12px;
     margin: 15px 15px 0px 0px;
 	flex-grow: 1;
+	${props => props.styles}
 `;

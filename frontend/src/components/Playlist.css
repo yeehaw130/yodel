@@ -2,8 +2,8 @@
     display: flex;
     flex-direction: row;
     justify-content: left;
-    /* width: 1200px; */
-    height: 100%;
+    overflow: hidden;
+    height: 400px;
     padding: 20px;
     border-radius: 10px;
 }

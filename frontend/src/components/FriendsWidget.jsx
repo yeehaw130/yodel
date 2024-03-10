@@ -1,23 +1,39 @@
 /* eslint-disable react/prop-types */
-import { TitleText, Widget } from "./CommonStyles";
+import { TitleText, Widget, SubtitleText } from "./CommonStyles";
+import styled from "styled-components";
+
+const FriendsList = styled.ul`
+    list-style-type: none;
+    padding: 0;
+    margin-top: 5px;
+    & > li {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+    }
+`;
 
 const FriendsWidget = ({ friends }) => {
     return (
-        <Widget>
+        <Widget styles={{
+            overflow: "auto",
+            height: "74.5vh",
+        }}>
             <TitleText>Friends</TitleText>
-            <ul>
+            <FriendsList>
                 {friends.map((friend, i) => (
                     <li key={i}>
                         <img
                             src={friend.profilePicture}
-                            alt={friend.name} width="50px"
-                            height="50px"
+                            alt={friend.name} 
+                            width="60px"
+                            height="60px"
                             style={{ borderRadius: "50%" }}
                         />
-                        <span>{friend.name}</span>
+                        <SubtitleText style={{ paddingLeft: "20px"}}>{friend.name}</SubtitleText>
                     </li>
                 ))}
-            </ul>
+            </FriendsList>
         </Widget>
     );
 };
