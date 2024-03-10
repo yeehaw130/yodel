@@ -19,8 +19,8 @@ const Playlist = ({ playlist }) => {
                 src={playlist.coverPhotoUrl ? playlist.coverPhotoUrl : "../../img/pig.jpeg"}
                 alt={playlist.name}
                 onDoubleClick={handleLike}
-                width="410px"
-                height="410px"
+                width="420px"
+                height="420px"
             />
             <PlaylistInfo playlist={playlist} />
         </div>
@@ -30,7 +30,7 @@ const Playlist = ({ playlist }) => {
 const PlaylistInfo = ({ playlist }) => {
     return (
         <div className="playlistInfo">
-            <TitleText>{playlist.name}</TitleText>
+            <TitleText style={{marginBottom: "20px"}}>{playlist.name}</TitleText>
             <span>{playlist.description ? playlist.description : "No description."}</span>
             <div style={{display: "flex", alignItems: "center"}}>
                 <img
@@ -68,16 +68,17 @@ const SongList = ({ songs }) => {
 
 const Song = ({ song }) => {
     return (
-        <div className="song">
+        <div className="song selectable">
             <img
                 src={song.imageUrl ? song.imageUrl : "../../img/pig.jpeg"}
                 alt={song.name}
                 width="55px"
                 height="55px"
+                style={{ borderRadius: "10%" }}
             />
             <div>
                 <span className="truncate">{song.name}</span>
-                <span style={{ color: "#ffffff70" }}>{song.artists}</span>
+                <span className="truncate" style={{ color: "#ffffff70" }}>{song.artists}</span>
             </div>
             <span className="truncate">{song.album}</span>
             <span>{song.duration}</span>

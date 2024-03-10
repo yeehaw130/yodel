@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import { UnderText } from './CommonStyles';
 
-const BulletSeparatedList = ({ list, under }) => {
+const BulletSeparatedList = ({ list, under, style }) => {
     return (
-        <div style={{paddingBottom: "20px", paddingTop: "20px"}}>
+        <div style={{paddingBottom: "20px", paddingTop: "20px", ...style}}>
             {under ?
                 <>
                     {list.slice(0, list.length - 1).map((it, i) => (

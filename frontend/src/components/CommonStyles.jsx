@@ -38,6 +38,7 @@ export const ErrorMessage = styled.div`
 export const TitleText = styled.span`
 	font-size: 48px;
 	font-weight: bold;
+	line-height: 1.3;
 	${props => props.styles}
 `;
 

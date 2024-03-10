@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Widget, SubtitleText } from "./CommonStyles";
 import BulletSeparatedList from "./BulletSeparatedList";
+import "../App.css";
 
 const LibraryIcon = ({ icon, children }) => {
     return (
@@ -31,23 +32,21 @@ const LibraryList = ({ entries: libraryEntries }) => {
 
 const LibraryEntry = ({ entry: entry }) => {
     return (
-        <div style={{ display: "flex" }}>
+        <div className="selectable" style={{ display: "flex", padding: "5px", borderRadius: "10px" }}>
             <img
-                src={entry.cover}
-                alt={entry.title}
+                src={entry.coverPhotoUrl ? entry.coverPhotoUrl : "../../img/pig.jpeg"}
+                alt={entry.name}
                 width="70px"
                 height="70px"
                 style={{ borderRadius: "10%", marginRight: "15px" }}
             />
             <div>
                 <span style={{
-                    maxWidth: "13ch",
-                    textOverflow: "ellipsis",
                     fontSize: "20px",
                 }}>
-                    {entry.title}
+                    {entry.name.length > 35 ? entry.name.substring(0, 35).trimEnd() + "..." : entry.name}
                 </span>
-                <BulletSeparatedList
+                <BulletSeparatedList style={{ paddingTop: "5px" }}
                     list={[
                         entry.createdBy.username,
                         entry.songs.length + ' songs'

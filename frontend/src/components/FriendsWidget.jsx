@@ -10,6 +10,7 @@ const FriendsList = styled.ul`
         display: flex;
         align-items: center;
         padding: 10px;
+        border-radius: 10px;
     }
 `;
 
@@ -22,7 +23,7 @@ const FriendsWidget = ({ friends }) => {
             <TitleText>Friends</TitleText>
             <FriendsList>
                 {friends.map((friend, i) => (
-                    <li key={i}>
+                    <li className="selectable" key={i}>
                         <img
                             src={friend.profilePicture}
                             alt={friend.name} 
