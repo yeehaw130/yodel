@@ -1,5 +1,5 @@
 // socialService.js
-const { admin, db } = require('../config/firebaseConfig');
+const { db } = require('../config/firebaseConfig');
 
 const followUser = async (userId, targetUserId) => {
     const followid = userId + targetUserId;
@@ -22,8 +22,7 @@ const followUser = async (userId, targetUserId) => {
     const targetUserRef = db.collection('users').doc(targetUserId);
     const targetUserPublic = await targetUserRef.get("isPublic");
     if (targetUserPublic) {
-        returnData = await acceptFollowRequest(followid);
-        return returnData;
+        followData = await acceptFollowRequest(followid);
     }
 
     return followData;
@@ -43,13 +42,13 @@ const acceptFollowRequest = async (followId) => {
     // increment follower count for target user
     const targetDocRef = db.collection('users').doc(follow.data().following);
     await targetDocRef.update({
-        followers: admin.firestore.FieldValue.increment(1)
+        followers: db.FieldValue.increment(1)
     });
 
     // increment following count for follower
     const followerDocRef = db.collection('users').doc(follow.data().follower);
     await followerDocRef.update({
-        following: admin.firestore.FieldValue.increment(1)
+        following: db.FieldValue.increment(1)
     });
 
     return follow.data();
@@ -76,13 +75,13 @@ const unfollowUser = async (userId, targetUserId) => {
         // decrement follower count for target user
         const targetDocRef = db.collection('users').doc(targetUserId);
         await targetDocRef.update({
-            followers: admin.firestore.FieldValue.increment(-1)
+            followers: db.FieldValue.increment(-1)
         });
 
         // decrement following count for follower
         const followerDocRef = db.collection('users').doc(userId);
         await followerDocRef.update({
-            following: admin.firestore.FieldValue.increment(-1)
+            following: db.FieldValue.increment(-1)
         });
     }
 
@@ -128,6 +127,15 @@ const getFollowRequests = async (userId) => {
     return requests;
 }
 
+const getProfilePictureUrl = async (userId) => {
+    const docRef = db.collection('users').doc(userId);
+    const docSnapshot = await docRef.get();
+    if (!docSnapshot.exists) {
+        throw new Error('User does not exist');
+    }
+    return docSnapshot.get('profilePictureUrl');
+}
+
 const getUser = async (userId) => {
     const docRef = db.collection('users').doc(userId);
     const docSnapshot = await docRef.get();
@@ -135,16 +143,6 @@ const getUser = async (userId) => {
         throw new Error('User does not exist');
     }
     return docSnapshot.data();
-}
-
-const followingStatus = async (userId, targetUserId) => {
-    const followId = userId + targetUserId;
-    const followDocRef = db.collection('follows').doc(followId);
-    const follow = await followDocRef.get();
-    if (!follow.exists) {
-        return "none";
-    }
-    return follow.data().status;
 }
 
 module.exports = {
@@ -156,6 +154,6 @@ module.exports = {
     getFollowers,
     getFollowing,
     getFollowRequests,
+    getProfilePictureUrl,
     getUser,
-    followingStatus
 };

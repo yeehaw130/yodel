@@ -5,7 +5,6 @@ const feedRoutes = require('./routes/feed');
 const searchRoutes = require('./routes/search');
 const playlistsRoutes = require('./routes/playlists');
 const socialRoutes = require('./routes/social');
-const profileRoutes = require('./routes/profile');
 const cors = require('cors');
 
 const app = express();
@@ -23,7 +22,6 @@ app.use('/api/feed', feedRoutes)
 app.use('/api/search', searchRoutes)
 app.use('/api/playlists', playlistsRoutes)
 app.use('/api/social', socialRoutes)
-app.use('/api/profile', profileRoutes)
 
 app.get('/', (req, res) => res.send('Hello World!'));
 

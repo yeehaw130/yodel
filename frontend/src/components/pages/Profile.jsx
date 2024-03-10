@@ -1,8 +1,8 @@
 import { BasicButton } from "../CommonStyles";
-import { useUserAuth } from "../../auth/Auth";
+import { auth, db } from "../../firebase";
+import { collection, query, where, getDocs, doc } from "firebase/firestore";
 import axios from "axios";
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import './Profile.css';
 
 
@@ -11,66 +11,28 @@ const Profile = () => {
   const [selectedPlaylist, setSelectedPlaylist] = useState('');
   const [fetching, setFetching] = useState(false);
   const [uploadedPlaylists, setUploadedPlaylists] = useState([]);
-  const [userInformation, setUserInformation] = useState({});
-  const [followingStatus, setFollowingStatus] = useState("none");
-  const [isMe, setIsMe] = useState(false);
-  const { userId } = useParams();
-  const { user } = useUserAuth();
 
 
   useEffect(() => {
-    const whoIsThis = async () => {
-      if (userId === user.uid) {
-        setIsMe(true);
-        return;
-      }
-      const reqId = user.uid;
-      try {
-        const response = await axios.get(
-          import.meta.env.VITE_BACKEND_URL + "/api/social/followingStatus/",
-          { params: { userId: reqId, targetUserId: userId } }
-        ).then(res => res.data);
-        setFollowingStatus(response.data);
-      }
-      catch (error) {
-        throw new Error("Failed to check if following: " + (error.response?.data || error.message));
-      }
-    };
-
     const fetchUploadedPlaylists = async () => {
-      if (!isMe && followingStatus !== "active" && !userInformation.isPublic) {
-        return;
-      }
-      try {
-        const playlistResponse = await axios.get(
-          import.meta.env.VITE_BACKEND_URL + "/api/profile/playlists/" + userId,
-        ).then(res => res.data);
-        setUploadedPlaylists(playlistResponse);
-      }
-      catch (error) {
-        throw new Error("Failed to fetch playlists: " + (error.response?.data || error.message));
-      }
-    };
-
-    const fetchUserInformation = async () => {
-      try {
-        const userResponse = await axios.get(
-          import.meta.env.VITE_BACKEND_URL + "/api/profile/" + userId,
-        ).then(res => res.data);
-        setUserInformation(userResponse);
-      }
-      catch (error) {
-        throw new Error("Failed to fetch user information: " + (error.response?.data || error.message));
+      if (auth.currentUser) {
+        const userId = auth.currentUser.uid;
+        const userRef = doc(db, "users", userId);
+        const q = query(collection(db, "playlists"), where("createdBy", "==", userRef));
+        const querySnapshot = await getDocs(q);
+        const fetchedPlaylists = [];
+        querySnapshot.forEach((doc) => {
+          fetchedPlaylists.push({ id: doc.id, ...doc.data() });
+        });
+        setUploadedPlaylists(fetchedPlaylists); // Update state with fetched playlists
       }
     };
 
-    fetchUserInformation();
-    whoIsThis();
     fetchUploadedPlaylists();
   }, []);
 
   const connectMusicService = () => {
-    const userId = user.uid;
+    const userId = auth.currentUser.uid;
     const returnUrl = import.meta.env.VITE_BACKEND_URL + "/api/auth/connectService/" + userId;
     window.location.href = "https://app.musicapi.com/yodel?returnUrl=" + returnUrl;
   }
@@ -78,7 +40,7 @@ const Profile = () => {
   const fetchPlaylists = async () => {
     setFetching(true);
     try {
-      const userId = user.uid;
+      const userId = auth.currentUser.uid;
       const playlistResponse = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/playlists/fetch/" + userId).then(res => res.data);
       setPlaylists(playlistResponse);
       setFetching(false);
@@ -91,7 +53,7 @@ const Profile = () => {
   const importPlaylist = async () => {
     if (!selectedPlaylist) return;
     try {
-      const userId = user.uid;
+      const userId = auth.currentUser.uid;
       const playlist = playlists.find(p => p.id === selectedPlaylist);
       await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/playlists/import/' + userId, { playlist });
       setUploadedPlaylists(prev => [...prev, playlist]);
@@ -100,134 +62,46 @@ const Profile = () => {
     }
   };
 
-  const playlistsDiv = () => {
-    if (isMe || followingStatus === "active" || userInformation.isPublic) {
-      return (
-        <div>
-          <h2>Uploaded Playlists</h2>
-          <ul className="uploaded-playlists">
-            {uploadedPlaylists.map((playlist) => (
-              <li key={playlist.id} className="playlist-item">
-                <span className="playlist-name">{playlist.name}</span>
-                <span className="playlist-detail">{playlist.totalItems} songs</span>
-                <span className="playlist-detail">{(playlist.likesCount || 0) + ' likes'}</span>
-                <span className="playlist-description">{playlist.description}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )
-    }
-    else {
-      return <h2>User profile is private</h2>
-    }
-  };
 
-  const followUser = async () => {
-    const reqId = user.uid;
-    try {
-      await axios.post(
-        import.meta.env.VITE_BACKEND_URL + "/api/social/follow/",
-        { userId: reqId, targetUserId: userId }
-      );
-      if (userInformation.isPublic) {
-        setFollowingStatus("active");
-      }
-      else {
-        setFollowingStatus("pending");
-      }
-    }
-    catch (error) {
-      throw new Error("Failed to follow user: " + (error.response?.data || error.message));
-    }
-  }
-
-  const unfollowUser = async () => {
-    const reqId = user.uid;
-    try {
-      await axios.post(
-        import.meta.env.VITE_BACKEND_URL + "/api/social/unfollow/",
-        { userId: reqId, targetUserId: userId }
-      );
-      setFollowingStatus("none");
-    }
-    catch (error) {
-      throw new Error("Failed to unfollow user: " + (error.response?.data || error.message));
-    }
-  }
-
-  const followOrUnfollowOrEditButton = () => {
-    if (isMe) {
-      // return (
-      //   <BasicButton onClick={() => window.location.href = "/editprofile"}>Edit Profile</BasicButton>
-      // );
-      return null;
-    }
-    else if (followingStatus === "active") {
-      return (
-        <BasicButton onClick={unfollowUser}>Unfollow</BasicButton>
-      );
-    }
-    else if (followingStatus === "pending") {
-      return (
-        <BasicButton onClick={unfollowUser}>Requested</BasicButton>
-      );
-    }
-    else {
-      return (
-        <BasicButton onClick={followUser}>Follow</BasicButton>
-      );
-    }
-  }
-
-  const controlsRow = (
-    <div className="controls-row">
-      <BasicButton onClick={connectMusicService}>
-        Connect to Music Service
-      </BasicButton>
-      <BasicButton onClick={fetchPlaylists} disabled={fetching}>
-        {fetching ? 'Fetching Playlists...' : 'Upload Playlists'}
-      </BasicButton>
-      {playlists.length > 0 && (
-        <>
-          <select value={selectedPlaylist} onChange={(e) => setSelectedPlaylist(e.target.value)} className="playlist-dropdown">
-            <option value="">Select a playlist</option>
-            {playlists.map(playlist => (
-              <option key={playlist.id} value={playlist.id}>{playlist.name}</option>
-            ))}
-          </select>
-          <BasicButton onClick={importPlaylist} disabled={!selectedPlaylist}>
-            Upload Selected Playlist
-          </BasicButton>
-        </>
-      )}
-    </div>
-  )
-
-  console.log(userInformation)
   return (
     <div className="profile-container">
-      <div className="user-info">
-        <div className="profile-picture">
-          <img src={userInformation.profilePictureUrl} alt="Profile Picture" />
-        </div>
-        <div className="profile-details">
-          <h2>{userInformation.username}</h2>
-          <p>{userInformation.bio}</p>
-          {followOrUnfollowOrEditButton()}
-        </div>
-
-        {/* <div className="profile-picture">
-          <img src="https://i.scdn.co/image/ab67757000003b828d74f661a47450a54ee755f2" alt="Profile Picture" />
-        </div>
-        <div className="profile-details">
-          <h2>seongbin</h2>
-          <p>welcome to my world</p>
-          {followOrUnfollowOrEditButton()}
-        </div> */}
+      <h1>Profile Page</h1>
+      <div className="controls-row">
+        <BasicButton onClick={connectMusicService}>
+          Connect to Music Service
+        </BasicButton>
+        <BasicButton onClick={fetchPlaylists} disabled={fetching}>
+          {fetching ? 'Fetching Playlists...' : 'Upload Playlists'}
+        </BasicButton>
+        {playlists.length > 0 && (
+          <>
+            <select value={selectedPlaylist} onChange={(e) => setSelectedPlaylist(e.target.value)} className="playlist-dropdown">
+              <option value="">Select a playlist</option>
+              {playlists.map(playlist => (
+                <option key={playlist.id} value={playlist.id}>{playlist.name}</option>
+              ))}
+            </select>
+            <BasicButton onClick={importPlaylist} disabled={!selectedPlaylist}>
+              Upload Selected Playlist
+            </BasicButton>
+          </>
+        )}
       </div>
-      {isMe && controlsRow}
-      {playlistsDiv()}
+      {uploadedPlaylists.length > 0 && (
+      <div>
+        <h2>Uploaded Playlists</h2>
+        <ul className="uploaded-playlists">
+          {uploadedPlaylists.map((playlist) => (
+            <li key={playlist.id} className="playlist-item">
+              <span className="playlist-name">{playlist.name}</span>
+              <span className="playlist-detail">{playlist.totalItems} songs</span>
+              <span className="playlist-detail">{(playlist.likesCount || 0) + ' likes'}</span>
+              <span className="playlist-description">{playlist.description}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
     </div>
   );  
 };
