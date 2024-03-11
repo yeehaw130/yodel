@@ -100,6 +100,9 @@ const importPlaylist = async (playlist, userId) => {
         description = spotifyPlaylist.description ? spotifyPlaylist.description : "";
     }
 
+    // add user id to userRef
+    userRef.update({ userId: userId });
+
     const playlistRef = db.collection('playlists').doc(playlist.id);
     await playlistRef.set({
         name: playlist.name,

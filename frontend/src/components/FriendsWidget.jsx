@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { TitleText, Widget, SubtitleText } from "./CommonStyles";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const FriendsList = styled.ul`
     list-style-type: none;
@@ -15,6 +16,8 @@ const FriendsList = styled.ul`
 `;
 
 const FriendsWidget = ({ friends }) => {
+    const navigate = useNavigate();
+
     return (
         <Widget styles={{
             overflow: "auto",
@@ -23,15 +26,16 @@ const FriendsWidget = ({ friends }) => {
             <TitleText>Friends</TitleText>
             <FriendsList>
                 {friends.map((friend, i) => (
-                    <li className="selectable" key={i}>
+                    <li className="selectable" key={i}
+                        onClick={() => navigate(`/profile/${friend.userId}`)}>
                         <img
-                            src={friend.profilePicture}
-                            alt={friend.name} 
+                            src={friend.profilePicture ? friend.profilePicture : "../../img/pig.jpeg"}
+                            alt={friend.name}
                             width="60px"
                             height="60px"
                             style={{ borderRadius: "50%" }}
                         />
-                        <SubtitleText style={{ paddingLeft: "20px"}}>{friend.name}</SubtitleText>
+                        <SubtitleText style={{ paddingLeft: "20px" }}>{friend.name}</SubtitleText>
                     </li>
                 ))}
             </FriendsList>
