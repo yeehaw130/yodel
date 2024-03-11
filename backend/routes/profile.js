@@ -15,7 +15,6 @@ router.get('/playlists/:userId', async (req, res) => {
 
 // GET user's playlist songs
 router.get('/playlists/songs/:playlistId', async (req, res) => {
-    console.log("The playlist id that was passed in was: ");
     try {
         const { playlistId } = req.params;
         console.log("The playlist id that was passed in was: ");

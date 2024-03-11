@@ -58,6 +58,7 @@ const Profile = () => {
       }
     };
 
+    /*
     const fetchPlaylistSongs = async () => {
       if (isMe && followingStatus !== "active" && !userInformation.isPublic) {
         console.log("not fetching playlist songs")
@@ -65,18 +66,10 @@ const Profile = () => {
       }
       try {
         for (const playlist of uploadedPlaylists) {
-          console.log("The playlist that I'm iterating on is:  ");
-          console.log(playlist);
-          console.log("The playlist Id is:  ");
-          console.log(playlist.id);
-          console.log(typeof (playlist.id));
-          console.log(import.meta.env.VITE_BACKEND_URL + "/api/profile/playlists/songs/" + playlist.id);
           const songsResponse = await axios.get(
             import.meta.env.VITE_BACKEND_URL + "/api/profile/playlists/songs/" + playlist.id,
             { params: { playlistId: playlist.id } }
           ).then(res => res.data);
-          console.log("The songs response is: ");
-          console.log(songsResponse);
           setPlaylistSongsMap((prevMap) => new Map(prevMap).set(playlist.id, songsResponse));
         }
       }
@@ -85,6 +78,7 @@ const Profile = () => {
       }
     };
 
+    */
     const fetchUserInformation = async () => {
       try {
         const userResponse = await axios.get(
@@ -97,11 +91,35 @@ const Profile = () => {
       }
     };
 
+    const fetchPlaylistSongs = async () => {
+      if (isMe && followingStatus !== "active" && !userInformation.isPublic) {
+        console.log("not fetching playlist songs");
+        return;
+      }
+      try {
+        const playlistResponse = await axios.get(
+          import.meta.env.VITE_BACKEND_URL + "/api/profile/playlists/" + userId,
+        ).then(res => res.data);
+        setUploadedPlaylists(playlistResponse);
+
+        await Promise.all(playlistResponse.map(async (playlist) => {
+          const songsResponse = await axios.get(
+            import.meta.env.VITE_BACKEND_URL + "/api/profile/playlists/songs/" + playlist.id,
+            { params: { playlistId: playlist.id } }
+          ).then(res => res.data);
+          setPlaylistSongsMap((prevMap) => new Map(prevMap).set(playlist.id, songsResponse));
+        }));
+      } catch (error) {
+        throw new Error("Failed to fetch playlist songs: " + (error.response?.data || error.message));
+      }
+    };
+
     const runInitialFetches = async () => {
       await fetchUserInformation();
       await whoIsThis();
       await fetchUploadedPlaylists();
       await fetchPlaylistSongs();
+      console.log("Fetched playlist songs ");
       setLoading(false);
       console.log("uploaded: ", uploadedPlaylists);
     }
@@ -140,6 +158,15 @@ const Profile = () => {
     }
   };
 
+  const toggle = (playlistId) => {
+    setOpenStates((prevStates) => ({
+      ...prevStates,
+      [playlistId]: !prevStates[playlistId],
+
+    })
+    );
+  };
+
   const playlistsDiv = () => {
     if (isMe || followingStatus === "active" || userInformation.isPublic) {
       return (
@@ -152,6 +179,19 @@ const Profile = () => {
                 <span className="playlist-detail">{playlist.totalItems} songs</span>
                 <span className="playlist-detail">{(playlist.likesCount || 0) + ' likes'}</span>
                 <span className="playlist-description">{playlist.description}</span>
+                <button onClick={() => toggle(playlist.id)}>View Songs</button>
+                {openStates[playlist.id] && (
+                  <div>
+                  <h3>Songs for {playlist.name}</h3>
+                  <ul>
+                    {/* Map over the songs for the current playlist */}
+                    {playlistSongsMap.get(playlist.id)?.map((song) => (
+                      <li key={song.id}>{song.name}</li>
+                      // You can display other song information as needed
+                    ))}
+                  </ul>
+                  </div>
+                )}
               </li>
             ))}
           </ul>
@@ -243,6 +283,7 @@ const Profile = () => {
       )}
     </div>
   )
+
   
   if (loading) {
     return <h2>Loading...</h2>
