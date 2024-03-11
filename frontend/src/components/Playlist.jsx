@@ -74,7 +74,8 @@ const SongList = ({ songs }) => {
 
 const Song = ({ song }) => {
     return (
-        <div className="song selectable">
+        <div className="song selectable"
+        onClick={() => window.open(song.previewUrl, '_blank')}>
             <img
                 src={song.imageUrl ? song.imageUrl : "../../img/pig.jpeg"}
                 alt={song.name}
