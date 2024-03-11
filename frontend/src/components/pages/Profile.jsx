@@ -22,6 +22,7 @@ const Profile = () => {
   const [isMe, setIsMe] = useState(false);
   const { userId } = useParams();
   const { user } = useUserAuth();
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -265,11 +266,6 @@ const Profile = () => {
     return <h2>Loading...</h2>
   }
 
-
-  if (loading) {
-    return <h2>Loading...</h2>
-  }
-
   return (
     <div className="profile-container">
       <div className="user-info">
@@ -279,6 +275,8 @@ const Profile = () => {
             width="150px"
             height="150px"
             style={{ borderRadius: "50%" }}
+            onClick={() => navigate(`/`)}
+            className="selectable"
           />
         <div className="profile-details">
           <h2>{userInformation.username}</h2>

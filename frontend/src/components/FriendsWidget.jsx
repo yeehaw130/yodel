@@ -29,7 +29,7 @@ const FriendsWidget = ({ friends }) => {
                     <li className="selectable" key={i}
                         onClick={() => navigate(`/profile/${friend.userId}`)}>
                         <img
-                            src={friend.profilePicture ? friend.profilePicture : "../../img/pig.jpeg"}
+                            src={friend.profilePicture ? friend.profilePicture : "/img/pig.jpeg"}
                             alt={friend.name}
                             width="60px"
                             height="60px"

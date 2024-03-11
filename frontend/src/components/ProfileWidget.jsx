@@ -38,7 +38,7 @@ const ProfileWidget = ({ user, friendCount }) => {
                 alignItems: "center"
             }}>
             <img
-                src={user.profilePictureUrl ? user.profilePictureUrl : "../../img/pig.jpeg"} alt={user.name}
+                src={user.profilePictureUrl ? user.profilePictureUrl : "/img/pig.jpeg"} alt={user.name}
                 width="150px"
                 height="150px"
                 style={{ borderRadius: "50%" }}
