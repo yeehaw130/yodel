@@ -15,6 +15,8 @@ const Profile = () => {
   const [uploadedPlaylists, setUploadedPlaylists] = useState([]);
   const [userInformation, setUserInformation] = useState({});
   const [followingStatus, setFollowingStatus] = useState("none");
+  const [followersCount, setFollowersCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
   const [songs, setSongs] = useState([]);
   const [playlistSongsMap, setPlaylistSongsMap] = useState(new Map());
   const [openStates, setOpenStates] = useState({});
@@ -72,6 +74,20 @@ const Profile = () => {
       }
     };
 
+    const fetchSocialCounts = async () => {
+      try {
+        const followersResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/social/followers/${userId}`);
+        setFollowersCount(followersResponse.data.count);
+        console.log("Followers Count:", followersResponse.data.count);
+
+        const followingResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/social/following/${userId}`);
+        setFollowingCount(followingResponse.data.count);
+        console.log("Following Count:", followingResponse.data.count);
+      } catch (error) {
+        throw new Error("Failed to fetch social counts:  " + (error.response?.data || error.message));
+      }
+    };
+
     const fetchPlaylistSongs = async () => {
       if (isMe && followingStatus !== "active" && !userInformation.isPublic) {
         console.log("not fetching playlist songs");
@@ -98,6 +114,7 @@ const Profile = () => {
       await fetchUserInformation();
       await whoIsThis();
       await fetchUploadedPlaylists();
+      await fetchSocialCounts();
       await fetchPlaylistSongs();
       setLoading(false);
     }
@@ -280,7 +297,7 @@ const Profile = () => {
           />
         <div className="profile-details">
           <h2>{userInformation.username}</h2>
-          {/* <p>{userInformation.bio ? userInformation.bio}</p> */}
+          <h4>{followersCount} Followers · {followingCount} Following</h4>
           {followOrUnfollowOrEditButton()}
         </div>
       </div>
