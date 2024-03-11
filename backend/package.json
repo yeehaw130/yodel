@@ -8,6 +8,10 @@
     "firebase-admin": "^12.0.0"
   },
   "scripts": {
-    "test": ""
+    "test": "jest --coverage --detectOpenHandles"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4"
   }
 }

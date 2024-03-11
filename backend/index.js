@@ -27,4 +27,6 @@ app.use('/api/profile', profileRoutes)
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
-app.listen(port, () => console.log(`Server listening at http://localhost:${port}`));
+server = app.listen(port, () => console.log(`Server listening at http://localhost:${port}`));
+
+module.exports = { app, server };
