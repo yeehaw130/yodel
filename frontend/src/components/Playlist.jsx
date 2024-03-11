@@ -18,7 +18,7 @@ const Playlist = ({ playlist }) => {
     return (
         <div className="playlist">
             <img
-                src={playlist.coverPhotoUrl ? playlist.coverPhotoUrl : "../../img/pig.jpeg"}
+                src={playlist.coverPhotoUrl ? playlist.coverPhotoUrl : "/img/pig.jpeg"}
                 alt={playlist.name}
                 onDoubleClick={handleLike}
                 width="420px"
@@ -37,7 +37,7 @@ const PlaylistInfo = ({ playlist, likeCount, liked }) => {
             <span>{playlist.description ? playlist.description : "No description."}</span>
             <div style={{display: "flex", alignItems: "center"}}>
                 <img
-                    src={playlist.createdBy.profilePictureUrl ? playlist.createdBy.profilePictureUrl : "../../img/pig.jpeg"}
+                    src={playlist.createdBy.profilePictureUrl ? playlist.createdBy.profilePictureUrl : "/img/pig.jpeg"}
                     alt={playlist.createdBy.username}
                     width="25px"
                     height="25px"
@@ -77,7 +77,7 @@ const Song = ({ song }) => {
         <div className="song selectable"
         onClick={() => window.open(song.previewUrl, '_blank')}>
             <img
-                src={song.imageUrl ? song.imageUrl : "../../img/pig.jpeg"}
+                src={song.imageUrl ? song.imageUrl : "/img/pig.jpeg"}
                 alt={song.name}
                 width="55px"
                 height="55px"
