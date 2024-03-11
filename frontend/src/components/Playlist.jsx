@@ -6,7 +6,7 @@ import { TitleText } from './CommonStyles';
 
 const Playlist = ({ playlist }) => {
     const [liked, setLiked] = useState(false);
-    const [likeCount, setLikeCount] = useState(playlist.numLikes);
+    const [likeCount, setLikeCount] = useState(0);
 
     const handleLike = () => {
         setLiked(!liked);
@@ -22,12 +22,12 @@ const Playlist = ({ playlist }) => {
                 width="420px"
                 height="420px"
             />
-            <PlaylistInfo playlist={playlist} />
+            <PlaylistInfo playlist={playlist} likeCount={likeCount} liked={liked} />
         </div>
     );
 }
 
-const PlaylistInfo = ({ playlist }) => {
+const PlaylistInfo = ({ playlist, likeCount, liked }) => {
     return (
         <div className="playlistInfo">
             <TitleText style={{marginBottom: "20px"}}>{playlist.name}</TitleText>
@@ -44,8 +44,9 @@ const PlaylistInfo = ({ playlist }) => {
                     list={[
                         playlist.createdBy.username,
                         playlist.songs.length + ' songs',
-                        playlist.duration,
-                        playlist.likesCount + ' likes'
+                        // playlist.duration,
+                        likeCount + ' likes',
+                        liked ? "💚" : "🤍"
                     ]}
                 />
             </div>

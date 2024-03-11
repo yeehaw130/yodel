@@ -146,6 +146,7 @@ const Home = () => {
       setPlaylists(playlists);
 
       const feed = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/playlists/feed/" + userId).then(res => res.data);
+      console.log(feed);
       setFeed(feed);           
       
       setUser({...user, ...userInfo, playlistCount: playlists.length});
