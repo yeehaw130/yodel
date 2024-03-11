@@ -16,14 +16,14 @@ import { getFirestore } from "firebase/firestore";
 
 // temp firebase bc read limit reached today
 const firebaseConfig = {
-    apiKey: "AIzaSyCWmcleRDJ_RoIHXY-wqivDqSJrMNbpBeA",
-    authDomain: "yodel-temp.firebaseapp.com",
-    projectId: "yodel-temp",
-    storageBucket: "yodel-temp.appspot.com",
-    messagingSenderId: "395931329218",
-    appId: "1:395931329218:web:13f476763bc25aa1e1115b",
-    measurementId: "G-F92K62WNFG"
-  };
+  apiKey: "AIzaSyCsxqtm7gjWxvCjQRbg9oYewLEysbk7oa0",
+  authDomain: "yodel-temp2.firebaseapp.com",
+  projectId: "yodel-temp2",
+  storageBucket: "yodel-temp2.appspot.com",
+  messagingSenderId: "411860928723",
+  appId: "1:411860928723:web:9fb565257de570ddfaec26",
+  measurementId: "G-9EEZDQGY45"
+};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

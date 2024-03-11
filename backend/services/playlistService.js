@@ -93,10 +93,11 @@ const importPlaylist = async (playlist, userId) => {
     //TODO: if applicable
     const spotifyPlaylistUrl = `playlists/${playlist.id}`;
     const spotifyPlaylist = await invokeSpotifyAPI(spotifyPlaylistUrl, integrationUserUUID);
-    const description = "";
-    const coverPhotoUrl = "";
+    let description = "";
+    let coverPhotoUrl = "";
     if (spotifyPlaylist) {
-        const coverPhotoUrl = (spotifyPlaylist.images && spotifyPlaylist.images.length) ? spotifyPlaylist.images[0].url : "";
+        coverPhotoUrl = (spotifyPlaylist.images && spotifyPlaylist.images.length) ? spotifyPlaylist.images[0].url : "";
+        description = spotifyPlaylist.description ? spotifyPlaylist.description : "";
     }
 
     const playlistRef = db.collection('playlists').doc(playlist.id);
@@ -187,9 +188,9 @@ const getUserPlaylists = async (userId, feed) => {
             } else {
                 console.log('No such document!');
             }
-            
+
         }
-    }                                  
+    }
 
     return playlists;
 };
