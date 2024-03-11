@@ -1,5 +1,16 @@
 # Yodel Backend
 
+Before running, make sure you create a `.env` file in the root. To the root, add your music API key as follows:
+```
+CLIENT_ID="..."
+CLIENT_SECRET="..."
+```
+
+To start the server, run 
+```
+node index.js
+```
+
 ## API Endpoints
 ```
 POST /auth/signup
