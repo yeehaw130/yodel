@@ -3,6 +3,8 @@ import { useState } from 'react';
 import BulletSeparatedList from './BulletSeparatedList';
 import './Playlist.css';
 import { TitleText } from './CommonStyles';
+import { useNavigate } from 'react-router-dom';
+import '../App.css';
 
 const Playlist = ({ playlist }) => {
     const [liked, setLiked] = useState(false);
@@ -28,6 +30,7 @@ const Playlist = ({ playlist }) => {
 }
 
 const PlaylistInfo = ({ playlist, likeCount, liked }) => {
+    const navigate = useNavigate();
     return (
         <div className="playlistInfo">
             <TitleText style={{marginBottom: "20px"}}>{playlist.name}</TitleText>
@@ -39,6 +42,8 @@ const PlaylistInfo = ({ playlist, likeCount, liked }) => {
                     width="25px"
                     height="25px"
                     style={{ borderRadius: "60%", paddingRight: "5px" }}
+                    onClick={() => navigate(`/profile/${playlist.createdBy.userId}`)}
+                    className="selectable"
                 />
                 <BulletSeparatedList
                     list={[
