@@ -101,7 +101,6 @@ const Profile = () => {
           import.meta.env.VITE_BACKEND_URL + "/api/profile/playlists/" + userId,
         ).then(res => res.data);
         setUploadedPlaylists(playlistResponse);
-
         await Promise.all(playlistResponse.map(async (playlist) => {
           const songsResponse = await axios.get(
             import.meta.env.VITE_BACKEND_URL + "/api/profile/playlists/songs/" + playlist.id,
@@ -119,9 +118,7 @@ const Profile = () => {
       await whoIsThis();
       await fetchUploadedPlaylists();
       await fetchPlaylistSongs();
-      console.log("Fetched playlist songs ");
       setLoading(false);
-      console.log("uploaded: ", uploadedPlaylists);
     }
 
     runInitialFetches();
