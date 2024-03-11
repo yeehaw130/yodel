@@ -10,6 +10,7 @@ const Profile = () => {
   const [playlists, setPlaylists] = useState([]);
   const [selectedPlaylist, setSelectedPlaylist] = useState('');
   const [fetching, setFetching] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [uploadedPlaylists, setUploadedPlaylists] = useState([]);
   const [userInformation, setUserInformation] = useState({});
   const [followingStatus, setFollowingStatus] = useState("none");
@@ -38,7 +39,8 @@ const Profile = () => {
     };
 
     const fetchUploadedPlaylists = async () => {
-      if (!isMe && followingStatus !== "active" && !userInformation.isPublic) {
+      if (isMe && followingStatus !== "active" && !userInformation.isPublic) {
+        console.log("not fetching playlists")
         return;
       }
       try {
@@ -64,9 +66,15 @@ const Profile = () => {
       }
     };
 
-    fetchUserInformation();
-    whoIsThis();
-    fetchUploadedPlaylists();
+    const runInitialFetches = async () => {
+      await fetchUserInformation();
+      await whoIsThis();
+      await fetchUploadedPlaylists();
+      setLoading(false);
+      console.log("uploaded: ", uploadedPlaylists);
+    }
+
+    runInitialFetches();
   }, []);
 
   const connectMusicService = () => {
@@ -203,8 +211,11 @@ const Profile = () => {
       )}
     </div>
   )
+  
+  if (loading) {
+    return <h2>Loading...</h2>
+  }
 
-  console.log(userInformation)
   return (
     <div className="profile-container">
       <div className="user-info">
