@@ -1,6 +1,7 @@
 const { db } = require('../config/firebaseConfig');
 
 const getUserPlaylists = async (userId) => {
+    console.log("Got to checkpoint alpha");
     const userRef = db.collection('users').doc(userId);
     const playlistsQuery = db.collection('playlists').where('createdBy', '==', userRef);
     const playlistsSnapshot = await playlistsQuery.get();
@@ -9,6 +10,18 @@ const getUserPlaylists = async (userId) => {
         playlists.push({ id: doc.id, ...doc.data() });
     });
     return playlists;
+}
+
+const getPlaylistSongs = async (playlistId) => {
+    console.log("Got to checkpoint");
+    const playlistRef = db.collection('playlists').doc(playlistId);
+    const songsQuery = db.collection('playlistsongs').where('playlist', '==', playlistRef);
+    const songsSnapshot = await songsQuery.get();
+    const songs = [];
+    songsSnapshot.forEach((doc) => {
+        songs.push({ id: doc.id, ...doc.data() });
+    });
+    return songs;
 }
 
 const getUserInfo = async (userId) => {
@@ -24,5 +37,6 @@ const getUserInfo = async (userId) => {
 
 module.exports = {
     getUserPlaylists,
+    getPlaylistSongs,
     getUserInfo
 };

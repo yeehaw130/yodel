@@ -14,6 +14,10 @@ const Profile = () => {
   const [uploadedPlaylists, setUploadedPlaylists] = useState([]);
   const [userInformation, setUserInformation] = useState({});
   const [followingStatus, setFollowingStatus] = useState("none");
+  const [songs, setSongs] = useState([]);
+  const [playlistSongsMap, setPlaylistSongsMap] = useState(new Map());
+  const [openStates, setOpenStates] = useState({});
+  const [fetchedFlags, setFetchedFlags] = useState({});
   const [isMe, setIsMe] = useState(false);
   const { userId } = useParams();
   const { user } = useUserAuth();
@@ -54,6 +58,33 @@ const Profile = () => {
       }
     };
 
+    const fetchPlaylistSongs = async () => {
+      if (isMe && followingStatus !== "active" && !userInformation.isPublic) {
+        console.log("not fetching playlist songs")
+        return;
+      }
+      try {
+        for (const playlist of uploadedPlaylists) {
+          console.log("The playlist that I'm iterating on is:  ");
+          console.log(playlist);
+          console.log("The playlist Id is:  ");
+          console.log(playlist.id);
+          console.log(typeof (playlist.id));
+          console.log(import.meta.env.VITE_BACKEND_URL + "/api/profile/playlists/songs/" + playlist.id);
+          const songsResponse = await axios.get(
+            import.meta.env.VITE_BACKEND_URL + "/api/profile/playlists/songs/" + playlist.id,
+            { params: { playlistId: playlist.id } }
+          ).then(res => res.data);
+          console.log("The songs response is: ");
+          console.log(songsResponse);
+          setPlaylistSongsMap((prevMap) => new Map(prevMap).set(playlist.id, songsResponse));
+        }
+      }
+      catch (error) {
+        throw new Error("Failed to fetch playlist songs: " + (error.response?.data || error.message));
+      }
+    };
+
     const fetchUserInformation = async () => {
       try {
         const userResponse = await axios.get(
@@ -70,6 +101,7 @@ const Profile = () => {
       await fetchUserInformation();
       await whoIsThis();
       await fetchUploadedPlaylists();
+      await fetchPlaylistSongs();
       setLoading(false);
       console.log("uploaded: ", uploadedPlaylists);
     }
