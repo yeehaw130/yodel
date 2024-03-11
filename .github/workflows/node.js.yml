@@ -30,7 +30,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         cache-dependency-path: "./backend/package-lock.json"
-
     - run: echo "$SECRETS_CONTEXT" > firebaseServiceAccount.json
       env:
         SECRETS_CONTEXT: ${{secrets.FIREBASE_SERVICE_ACCOUNT}}
