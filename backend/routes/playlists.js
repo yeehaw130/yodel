@@ -10,7 +10,7 @@ router.post('/:playlistId/likes', async (req, res) => {
         const result = await playlistService.likePlaylist(userId, playlistId);
         res.json(result);
     } catch (error) {
-        res.status(500).send(error.response.data.message);
+        res.status(500).send(error);
     }
 });
 
@@ -22,7 +22,7 @@ router.delete('/:playlistId/likes', async (req, res) => {
         const result = await playlistService.unlikePlaylist(userId, playlistId);
         res.json(result);
     } catch (error) {
-        res.status(500).send(error.response.data.message);
+        res.status(500).send(error);
     }
 });
 
@@ -33,7 +33,7 @@ router.get('/fetch/:userId', async (req, res) => {
         const result = await playlistService.fetchPlaylists(userId);
         res.json(result);
     } catch (error) {
-        res.status(500).send(error.response.data.message)
+        res.status(500).send(error)
     }
 });
 
