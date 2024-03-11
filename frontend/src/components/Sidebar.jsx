@@ -18,7 +18,7 @@ const Sidebar = () => {
     return (
         <SidebarContainer>
             <StyledLink to="/">Home</StyledLink>
-            <StyledLink to={`/profile/${user.email}`}>Profile</StyledLink>
+            <StyledLink to={`/profile/${user.uid}`}>Profile</StyledLink>
             <StyledLink to="/inbox">Inbox</StyledLink>
             <StyledLink to="#" onClick={handleLogout}>Logout</StyledLink>
         </SidebarContainer>
