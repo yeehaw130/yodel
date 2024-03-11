@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './Profile.css';
+import { useNavigate } from "react-router-dom";
 
 
 const Profile = () => {
@@ -58,27 +59,6 @@ const Profile = () => {
       }
     };
 
-    /*
-    const fetchPlaylistSongs = async () => {
-      if (isMe && followingStatus !== "active" && !userInformation.isPublic) {
-        console.log("not fetching playlist songs")
-        return;
-      }
-      try {
-        for (const playlist of uploadedPlaylists) {
-          const songsResponse = await axios.get(
-            import.meta.env.VITE_BACKEND_URL + "/api/profile/playlists/songs/" + playlist.id,
-            { params: { playlistId: playlist.id } }
-          ).then(res => res.data);
-          setPlaylistSongsMap((prevMap) => new Map(prevMap).set(playlist.id, songsResponse));
-        }
-      }
-      catch (error) {
-        throw new Error("Failed to fetch playlist songs: " + (error.response?.data || error.message));
-      }
-    };
-
-    */
     const fetchUserInformation = async () => {
       try {
         const userResponse = await axios.get(
@@ -142,7 +122,7 @@ const Profile = () => {
       throw new Error("Failed to fetch playlists: " + (error.response?.data || error.message));
     }
   }
-  
+
   const importPlaylist = async () => {
     if (!selectedPlaylist) return;
     try {
@@ -179,14 +159,14 @@ const Profile = () => {
                 <button onClick={() => toggle(playlist.id)}>View Songs</button>
                 {openStates[playlist.id] && (
                   <div>
-                  <h3>Songs for {playlist.name}</h3>
-                  <ul>
-                    {/* Map over the songs for the current playlist */}
-                    {playlistSongsMap.get(playlist.id)?.map((song) => (
-                      <li key={song.id}>{song.name}</li>
-                      // You can display other song information as needed
-                    ))}
-                  </ul>
+                    <h3>Songs for {playlist.name}</h3>
+                    <ul>
+                      {/* Map over the songs for the current playlist */}
+                      {playlistSongsMap.get(playlist.id)?.map((song) => (
+                        <li key={song.id}>{song.name}</li>
+                        // You can display other song information as needed
+                      ))}
+                    </ul>
                   </div>
                 )}
               </li>
@@ -280,12 +260,12 @@ const Profile = () => {
       )}
     </div>
   )
-  
+
   if (loading) {
     return <h2>Loading...</h2>
   }
 
-  
+
   if (loading) {
     return <h2>Loading...</h2>
   }
@@ -293,28 +273,23 @@ const Profile = () => {
   return (
     <div className="profile-container">
       <div className="user-info">
-        <div className="profile-picture">
-          <img src={userInformation.profilePictureUrl ? userInformation.profilePictureUrl : "../../img/pig.jpeg"} alt="Profile Picture" />
-        </div>
+          <img
+            src={userInformation.profilePictureUrl ? userInformation.profilePictureUrl : "../../img/pig.jpeg"}
+            alt="Profile Picture"
+            width="150px"
+            height="150px"
+            style={{ borderRadius: "50%" }}
+          />
         <div className="profile-details">
           <h2>{userInformation.username}</h2>
-          <p>{userInformation.bio}</p>
+          {/* <p>{userInformation.bio ? userInformation.bio}</p> */}
           {followOrUnfollowOrEditButton()}
         </div>
-
-        {/* <div className="profile-picture">
-          <img src="https://i.scdn.co/image/ab67757000003b828d74f661a47450a54ee755f2" alt="Profile Picture" />
-        </div>
-        <div className="profile-details">
-          <h2>seongbin</h2>
-          <p>welcome to my world</p>
-          {followOrUnfollowOrEditButton()}
-        </div> */}
       </div>
       {isMe && controlsRow}
       {playlistsDiv()}
     </div>
-  );  
+  );
 };
 
 export default Profile;
