@@ -13,6 +13,17 @@ router.get('/playlists/:userId', async (req, res) => {
     }
 });
 
+// GET user's playlist songs
+router.get('/playlists/songs/:playlistId', async (req, res) => {
+    try {
+        const { playlistId } = req.params;
+        const songs = await profileService.getPlaylistSongs(playlistId);
+        res.json(songs);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
 // GET user's info
 router.get('/:userId', async (req, res) => {
     try {

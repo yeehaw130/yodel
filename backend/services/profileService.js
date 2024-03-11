@@ -11,6 +11,25 @@ const getUserPlaylists = async (userId) => {
     return playlists;
 }
 
+const getPlaylistSongs = async (playlistId) => {
+    const playlistRef = db.collection('playlists').doc(playlistId);
+    const songsQuery = db.collection('playlistSongs').where('playlist', '==', playlistRef);
+    const songsSnapshot = await songsQuery.get();
+    const songs = [];
+    songsSnapshot.forEach((doc) => {
+        songs.push({ id: doc.id, ...doc.data() });
+    });
+    final_songs = [];
+    for (const song of songs) {
+        const songsQuery = db.collection('songs').where('__name__', '==', song.song);
+        const songsSnapshot = await songsQuery.get();
+        songsSnapshot.forEach((doc) => {
+            final_songs.push({ id: song.id, name: doc.data().name});
+        })
+    }
+    return final_songs;
+}
+
 const getUserInfo = async (userId) => {
     const userRef = db.collection('users').doc(userId);
     const userSnapshot = await userRef.get();
@@ -24,5 +43,6 @@ const getUserInfo = async (userId) => {
 
 module.exports = {
     getUserPlaylists,
+    getPlaylistSongs,
     getUserInfo
 };
