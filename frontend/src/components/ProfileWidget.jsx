@@ -14,8 +14,7 @@ const ProfileInfo = styled.div`
 `;
 
 
-
-const ProfileWidget = ({ user }) => {
+const ProfileWidget = ({ user, friendCount }) => {
     const navigate = useNavigate();
     const { user: userAuth, logOut } = useUserAuth();
 
@@ -39,7 +38,7 @@ const ProfileWidget = ({ user }) => {
                 alignItems: "center"
             }}>
             <img
-                src={user.profilePictureUrl} alt={user.name}
+                src={user.profilePictureUrl ? user.profilePictureUrl : "../../img/pig.jpeg"} alt={user.name}
                 width="150px"
                 height="150px"
                 style={{ borderRadius: "50%" }}
@@ -50,7 +49,7 @@ const ProfileWidget = ({ user }) => {
                 <TitleText>{user.username ? user.username : "..."}</TitleText>
                 <BulletSeparatedList list={[
                     user.playlistCount + " playlists",
-                    user.friends.length + " friends",
+                    friendCount + " friends",
                 ]} />
             </ProfileInfo>
         </Widget>

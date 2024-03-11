@@ -280,6 +280,10 @@ const Profile = () => {
       )}
     </div>
   )
+  
+  if (loading) {
+    return <h2>Loading...</h2>
+  }
 
   
   if (loading) {
@@ -290,7 +294,7 @@ const Profile = () => {
     <div className="profile-container">
       <div className="user-info">
         <div className="profile-picture">
-          <img src={userInformation.profilePictureUrl} alt="Profile Picture" />
+          <img src={userInformation.profilePictureUrl ? userInformation.profilePictureUrl : "../../img/pig.jpeg"} alt="Profile Picture" />
         </div>
         <div className="profile-details">
           <h2>{userInformation.username}</h2>

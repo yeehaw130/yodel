@@ -3,10 +3,12 @@ import { useState } from 'react';
 import BulletSeparatedList from './BulletSeparatedList';
 import './Playlist.css';
 import { TitleText } from './CommonStyles';
+import { useNavigate } from 'react-router-dom';
+import '../App.css';
 
 const Playlist = ({ playlist }) => {
     const [liked, setLiked] = useState(false);
-    const [likeCount, setLikeCount] = useState(playlist.numLikes);
+    const [likeCount, setLikeCount] = useState(0);
 
     const handleLike = () => {
         setLiked(!liked);
@@ -22,12 +24,13 @@ const Playlist = ({ playlist }) => {
                 width="420px"
                 height="420px"
             />
-            <PlaylistInfo playlist={playlist} />
+            <PlaylistInfo playlist={playlist} likeCount={likeCount} liked={liked} />
         </div>
     );
 }
 
-const PlaylistInfo = ({ playlist }) => {
+const PlaylistInfo = ({ playlist, likeCount, liked }) => {
+    const navigate = useNavigate();
     return (
         <div className="playlistInfo">
             <TitleText style={{marginBottom: "20px"}}>{playlist.name}</TitleText>
@@ -39,13 +42,16 @@ const PlaylistInfo = ({ playlist }) => {
                     width="25px"
                     height="25px"
                     style={{ borderRadius: "60%", paddingRight: "5px" }}
+                    onClick={() => navigate(`/profile/${playlist.createdBy.userId}`)}
+                    className="selectable"
                 />
                 <BulletSeparatedList
                     list={[
                         playlist.createdBy.username,
                         playlist.songs.length + ' songs',
-                        playlist.duration,
-                        playlist.likesCount + ' likes'
+                        // playlist.duration,
+                        likeCount + ' likes',
+                        liked ? "💚" : "🤍"
                     ]}
                 />
             </div>
@@ -68,7 +74,8 @@ const SongList = ({ songs }) => {
 
 const Song = ({ song }) => {
     return (
-        <div className="song selectable">
+        <div className="song selectable"
+        onClick={() => window.open(song.previewUrl, '_blank')}>
             <img
                 src={song.imageUrl ? song.imageUrl : "../../img/pig.jpeg"}
                 alt={song.name}

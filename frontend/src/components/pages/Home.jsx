@@ -50,91 +50,19 @@ const Home = () => {
     //     ]
     //   },
     // ],
-    friends: [
-      {
-        name: "Friend 1",
-        profilePicture: "../../img/pig.jpeg"
-      },
-      {
-        name: "Friend 2",
-        profilePicture: "../../img/pig.jpeg"
-      },
-      {
-        name: "Friend 3",
-        profilePicture: "../../img/pig.jpeg"
-      },
-      {
-        name: "Friend 4",
-        profilePicture: "../../img/pig.jpeg"
-      },
-      {
-        name: "Friend 1",
-        profilePicture: "../../img/pig.jpeg"
-      },
-      {
-        name: "Friend 2",
-        profilePicture: "../../img/pig.jpeg"
-      },
-      {
-        name: "Friend 3",
-        profilePicture: "../../img/pig.jpeg"
-      },
-      {
-        name: "Friend 4",
-        profilePicture: "../../img/pig.jpeg"
-      },
-      {
-        name: "Friend 1",
-        profilePicture: "../../img/pig.jpeg"
-      },
-      {
-        name: "Friend 2",
-        profilePicture: "../../img/pig.jpeg"
-      },
-      {
-        name: "Friend 3",
-        profilePicture: "../../img/pig.jpeg"
-      },
-      {
-        name: "Friend 4",
-        profilePicture: "../../img/pig.jpeg"
-      },
-      {
-        name: "Friend 1",
-        profilePicture: "../../img/pig.jpeg"
-      },
-      {
-        name: "Friend 2",
-        profilePicture: "../../img/pig.jpeg"
-      },
-      {
-        name: "Friend 3",
-        profilePicture: "../../img/pig.jpeg"
-      },
-      {
-        name: "Friend 4",
-        profilePicture: "../../img/pig.jpeg"
-      },
-      {
-        name: "Friend 1",
-        profilePicture: "../../img/pig.jpeg"
-      },
-      {
-        name: "Friend 2",
-        profilePicture: "../../img/pig.jpeg"
-      },
-      {
-        name: "Friend 3",
-        profilePicture: "../../img/pig.jpeg"
-      },
-      {
-        name: "Friend 4",
-        profilePicture: "../../img/pig.jpeg"
-      }
-    ]
   });
   const [userPlaylists, setPlaylists] = useState([]);
   const [feed, setFeed] = useState([]);
+  const [friends, setFriends] = useState([
+    {
+      name: "Friend 1",
+      profilePicture: "../../img/pig.jpeg"
+    },
+    {
+      name: "Friend 2",
+      profilePicture: "../../img/pig.jpeg"
+    },
+  ]);
 
   useEffect(() => {
     const getUser = async () => {
@@ -149,6 +77,15 @@ const Home = () => {
       setFeed(feed);           
       
       setUser({...user, ...userInfo, playlistCount: playlists.length});
+
+      // fetch friends
+      let following = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/social/following/" + userId).then(res => res.data);
+      const promises = following.map(async f => {
+        const friend = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/profile/" + f).then(res => res.data);
+        return {userId: f, profilePicture: friend.profilePictureUrl, name: friend.username};
+      })
+      following = await Promise.all(promises);
+      setFriends(following);
     }
     getUser();
   }, []);
@@ -161,8 +98,8 @@ const Home = () => {
       </WidgetColumn>
       <Feed playlists={feed} />
       <WidgetColumn>
-        <ProfileWidget user={user} />
-        <FriendsWidget friends={user.friends} />
+        <ProfileWidget user={user} friendCount={friends.length} />
+        <FriendsWidget friends={friends} />
       </WidgetColumn>
     </HomeContainer>
   );
