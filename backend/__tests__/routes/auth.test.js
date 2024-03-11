@@ -1,6 +1,7 @@
 const request = require('supertest');
 const { app, server } = require('../../index');
 const authService = require('../../services/authService');
+require('dotenv').config();
 
 jest.mock('../../services/authService');
 
@@ -86,7 +87,7 @@ describe('auth.js', () => {
       authService.connectMusicService.mockResolvedValue();
       const response = await request(app).get(basePath + '/connectservice/user123').query({ data64: 'some_data' });
       expect(response.status).toBe(302);
-      expect(response.header.location).toBe('http://localhost:5173');
+      expect(response.header.location).toBe(process.env.FRONTEND_URL || 'http://localhost:5173');
     });
 
     it('should respond with 500 if an error occurs', async () => {

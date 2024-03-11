@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authService = require('../services/authService');
+require('dotenv').config();
 
 router.post('/validateusername', async (req, res) => {
     const { username } = req.body;
@@ -42,7 +43,7 @@ router.get('/connectservice/:userId', async (req, res) => {
     const { data64 } = req.query;
     try {
         await authService.connectMusicService(userId, data64);
-        res.redirect('http://localhost:5173');
+        res.redirect(process.env.FRONTEND_URL || 'http://localhost:5173');
     } catch (error) {
         res.status(500).send({ error: "Failed to connect to music service", message: error.message });
     }
