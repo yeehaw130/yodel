@@ -142,7 +142,7 @@ const Home = () => {
       const userId = auth.currentUser.uid;
       const userInfo = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/social/" + userId).then(res => res.data);
 
-      const playlists = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/profile/playlists/" + userId).then(res => res.data);
+      const playlists = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/playlists/get/" + userId).then(res => res.data);
       setPlaylists(playlists);
 
       const feed = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/playlists/feed/" + userId).then(res => res.data);

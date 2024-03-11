@@ -61,4 +61,15 @@ router.get('/feed/:userId', async (req, res) => {
     }
 });
 
+// GET playlists created by user (with details)
+router.get('/get/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const result = await playlistService.getUserPlaylists(userId, false);
+        res.json(result);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
 module.exports = router;
