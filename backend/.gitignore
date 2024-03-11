@@ -53,3 +53,4 @@ Thumbs.db
 
 # Firebase service account key
 config/firebaseServiceAccount.json
+firebaseServiceAccount.json

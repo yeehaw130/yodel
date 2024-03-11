@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-const serviceAccount = require('./firebaseServiceAccount.json'); 
+const serviceAccount = require('../firebaseServiceAccount.json'); 
 
 // Prevents reinitializing the app
 if (admin.apps.length === 0) {
