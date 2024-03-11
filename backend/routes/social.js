@@ -9,7 +9,7 @@ router.post('/follow', async (req, res) => {
         const result = await socialService.followUser(userId, targetUserId);
         res.json({ success: true, message: 'User followed successfully', data: result });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Failed to follow user', error: error.message });
+        res.status(500).send(error.message);
     }
 });
 
@@ -20,7 +20,7 @@ router.post('/unfollow', async (req, res) => {
         const result = await socialService.unfollowUser(userId, targetUserId);
         res.json({ success: true, message: 'User unfollowed successfully', data: result });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Failed to unfollow user', error: error.message });
+        res.status(500).send(error.message);
     }
 });
 
@@ -31,7 +31,7 @@ router.post('/acceptfollow', async (req, res) => {
         const result = await socialService.handleFollowRequest(followId, true);
         res.json({ success: true, message: 'Follow request accepted', data: result });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Failed to accept follow request', error: error.message });
+        res.status(500).send(error.message);
     }
 });
 
@@ -42,7 +42,18 @@ router.post('/rejectfollow', async (req, res) => {
         const result = await socialService.handleFollowRequest(followId, false);
         res.json({ success: true, message: 'Follow request rejected', data: result });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Failed to reject follow request', error: error.message });
+        res.status(500).send(error.message);
+    }
+});
+
+// GET is a user following another user
+router.get('/followingStatus', async (req, res) => {
+    try {
+        const { userId, targetUserId } = req.query;
+        const result = await socialService.followingStatus(userId, targetUserId);
+        res.json({ success: true, message: 'Follow status retrieved', data: result });
+    } catch (error) {
+        res.status(500).send(error.message);
     }
 });
 
@@ -96,17 +107,6 @@ router.get('/requests/:userId', async (req, res) => {
         const userId = req.params.userId;
         const requests = await socialService.getFollowRequests(userId);
         res.json(requests);
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-});
-
-// GET profile picture URL for a user
-router.get('/profilepicture/:userId', async (req, res) => {
-    try {
-        const userId = req.params.userId;
-        const pictureUrl = await socialService.getProfilePictureUrl(userId);
-        res.json(pictureUrl);
     } catch (error) {
         res.status(500).send(error.message);
     }
