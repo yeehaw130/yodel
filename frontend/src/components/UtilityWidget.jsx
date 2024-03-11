@@ -19,8 +19,8 @@ const UtilButton = ({icon, children}) => {
 const UtilityWidget = () => {
     return (
         <Widget style={{ display: "flex", flexDirection:"column", justifyContent: "center"}}>
-            <UtilButton icon="../../img/home.svg">Home</UtilButton>
-            <UtilButton icon="../../img/search.svg">Search</UtilButton>
+            <UtilButton icon="/img/home.svg">Home</UtilButton>
+            <UtilButton icon="/img/search.svg">Search</UtilButton>
         </Widget>
     );
 };

@@ -34,7 +34,7 @@ const LibraryEntry = ({ entry: entry }) => {
     return (
         <div className="selectable" style={{ display: "flex", padding: "5px", borderRadius: "10px" }}>
             <img
-                src={entry.coverPhotoUrl ? entry.coverPhotoUrl : "../../img/pig.jpeg"}
+                src={entry.coverPhotoUrl ? entry.coverPhotoUrl : "/img/pig.jpeg"}
                 alt={entry.name}
                 width="70px"
                 height="70px"
@@ -72,7 +72,7 @@ const LibraryWidget = ({ playlists }) => {
                 alignItems: "center",
                 padding: "0px 15px 0px 15px",
             }}>
-                <LibraryIcon icon="../../img/bookshelf.svg">Library</LibraryIcon>
+                <LibraryIcon icon="/img/bookshelf.svg">Library</LibraryIcon>
                 <div style={{ flex: 1 }}></div>
                 <SubtitleText style={{ fontSize: 35 }}> + </SubtitleText>
             </div>
