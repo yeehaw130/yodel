@@ -17,9 +17,10 @@ const Profile = () => {
   const [followingStatus, setFollowingStatus] = useState("none");
   const [followersCount, setFollowersCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
-  const [followersList, setFollowersList] = useState({});
-  const [followingList, setFollowingList] = useState({});
-  const [songs, setSongs] = useState([]);
+  const [followersList, setFollowersList] = useState([]);
+  const [followingList, setFollowingList] = useState([]);
+  const [showFollowers, setShowFollowers] = useState(false);
+  const [showFollowing, setShowFollowing] = useState(false);
   const [songs, setSongs] = useState([]);
   const [playlistSongsMap, setPlaylistSongsMap] = useState(new Map());
   const [openStates, setOpenStates] = useState({});
@@ -92,13 +93,15 @@ const Profile = () => {
 
     const fetchSocialLists = async () => {
       try {
-        const followersResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/social/followers/list/${userId}`).then(res => res.data);
-        setFollowersList(followersResponse);
+        const followersListResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/social/followers/list/${userId}`).then(res => res.data);
+        setFollowersList(followersListResponse);
+        console.log("followerlist ", followersListResponse);
 
-        const followingResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/social/following/list/${userId}`).then(res => res.data);
-        setFollowingList(followingResponse);
+        const followingListResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/social/following/list/${userId}`).then(res => res.data);
+        setFollowingList(followingListResponse);
+        console.log("followinglist ", followingListResponse);
       } catch (error) {
-        throw new Error("Failed to fetch social counts:  " + (error.response?.data || error.message));
+        throw new Error("Failed to fetch social lists:  " + (error.response?.data || error.message));
       }
     };
 
@@ -130,6 +133,7 @@ const Profile = () => {
       await whoIsThis();
       await fetchUploadedPlaylists();
       await fetchSocialCounts();
+      await fetchSocialLists();
       await fetchPlaylistSongs();
       setLoading(false);
     }
@@ -177,7 +181,34 @@ const Profile = () => {
     );
   };
 
-
+  const socialDiv = () => {
+    return (
+      <div className="social-div">
+        <div className="dropdown-container">
+          <button onClick={() => setShowFollowers(!showFollowers)}>
+            {followersCount || 0} Followers
+          </button>
+          {showFollowers && (
+            <ul className="dropdown">
+              <li>test</li>
+              {/* Add more follower items here */}
+            </ul>
+          )}
+        </div>
+        <div className="dropdown-container">
+          <button onClick={() => setShowFollowing(!showFollowing)}>
+            {followingCount || 0} Following
+          </button>
+          {showFollowing && (
+            <ul className="dropdown">
+              <li>test2</li>
+              {/* Add more following items here */}
+            </ul>
+          )}
+        </div>
+      </div>
+    );
+    };
 
   const playlistsDiv = () => {
     if (isMe || followingStatus === "active" || userInformation.isPublic) {
@@ -314,7 +345,7 @@ const Profile = () => {
           />
         <div className="profile-details">
           <h2>{userInformation.username}</h2>
-          <h4>{followersCount || 0} Followers · {followingCount || 0} Following</h4>
+          {socialDiv()}
           {followOrUnfollowOrEditButton()}
         </div>
       </div>
