@@ -76,13 +76,11 @@ const Profile = () => {
 
     const fetchSocialCounts = async () => {
       try {
-        const followersResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/social/followers/${userId}`);
-        setFollowersCount(followersResponse.data.count);
-        console.log("Followers Count:", followersResponse.data.count);
+        const followersResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/social/followers/${userId}`).then(res => res.data);
+        setFollowersCount(followersResponse.length);
 
-        const followingResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/social/following/${userId}`);
-        setFollowingCount(followingResponse.data.count);
-        console.log("Following Count:", followingResponse.data.count);
+        const followingResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/social/following/${userId}`).then(res => res.data);
+        setFollowingCount(followingResponse.length);
       } catch (error) {
         throw new Error("Failed to fetch social counts:  " + (error.response?.data || error.message));
       }
@@ -297,7 +295,7 @@ const Profile = () => {
           />
         <div className="profile-details">
           <h2>{userInformation.username}</h2>
-          <h4>{followersCount} Followers · {followingCount} Following</h4>
+          <h4>{followersCount || 0} Followers · {followingCount || 0} Following</h4>
           {followOrUnfollowOrEditButton()}
         </div>
       </div>
