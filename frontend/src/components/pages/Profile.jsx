@@ -17,6 +17,9 @@ const Profile = () => {
   const [followingStatus, setFollowingStatus] = useState("none");
   const [followersCount, setFollowersCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
+  const [followersList, setFollowersList] = useState({});
+  const [followingList, setFollowingList] = useState({});
+  const [songs, setSongs] = useState([]);
   const [songs, setSongs] = useState([]);
   const [playlistSongsMap, setPlaylistSongsMap] = useState(new Map());
   const [openStates, setOpenStates] = useState({});
@@ -85,6 +88,20 @@ const Profile = () => {
         throw new Error("Failed to fetch social counts:  " + (error.response?.data || error.message));
       }
     };
+
+
+    const fetchSocialLists = async () => {
+      try {
+        const followersResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/social/followers/list/${userId}`).then(res => res.data);
+        setFollowersList(followersResponse);
+
+        const followingResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/social/following/list/${userId}`).then(res => res.data);
+        setFollowingList(followingResponse);
+      } catch (error) {
+        throw new Error("Failed to fetch social counts:  " + (error.response?.data || error.message));
+      }
+    };
+
 
     const fetchPlaylistSongs = async () => {
       if (isMe && followingStatus !== "active" && !userInformation.isPublic) {
@@ -159,6 +176,8 @@ const Profile = () => {
     })
     );
   };
+
+
 
   const playlistsDiv = () => {
     if (isMe || followingStatus === "active" || userInformation.isPublic) {
