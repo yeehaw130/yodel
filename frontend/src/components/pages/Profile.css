@@ -34,7 +34,7 @@
   width: 100%;
 }
 
-.dropdown li:hover {
+.dropdown span:hover {
   cursor: pointer;
 }
 

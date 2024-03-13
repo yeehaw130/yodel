@@ -110,16 +110,12 @@ const getFollowers = async (userId) => {
 
 
 const getFollowersList = async (userId) => {
-    console.log("Got to getFollowersList function in socialService.js");
     const docRef = db.collection('follows').where('following', '==', userId).where('status', '==', 'active');
     const docSnapshot = await docRef.get();
     const followers = [];
     docSnapshot.forEach(doc => {
         followers.push(doc.data().follower);
     });
-
-    console.log("the list of followers is: ");
-    console.log(followers);
 
     final_followers = [];
     for (const follower of followers) {
@@ -144,16 +140,12 @@ const getFollowing = async (userId) => {
 }
 
 const getFollowingList = async (userId) => {
-    console.log("Got to getFollowingList function in socialService.js");
     const docRef = db.collection('follows').where('follower', '==', userId).where('status', '==', 'active');
     const docSnapshot = await docRef.get();
     const following = [];
     docSnapshot.forEach(doc => {
         following.push(doc.data().following);
     });
-
-    console.log("the list of following is: ");
-    console.log(following);
 
     final_following = [];
     for (const followed of following) {

@@ -211,6 +211,30 @@ describe('social.js', () => {
         });
       });
 
+      describe('GET ' + basePath + '/followers/list/:userId', () => {
+        it('should respond with 200 and user following if successful', async () => {
+          const mockResult = { /* mock result data */ };
+          const userId = 'user123';
+          socialService.getFollowersList.mockResolvedValue(mockResult);
+    
+          const response = await request(app)
+            .get(`${basePath}/followers/list/${userId}`);
+    
+          expect(response.status).toBe(200);
+          expect(response.body).toEqual(mockResult);
+        });
+    
+        it('should respond with 500 if an error occurs', async () => {
+          socialService.getFollowersList.mockRejectedValue(new Error('Internal Server Error'));
+    
+          const userId = 'user123';
+          const response = await request(app)
+            .get(`${basePath}/followers/list/${userId}`);
+    
+          expect(response.status).toBe(500);
+        });
+      });
+
       describe('GET ' + basePath + '/following/:userId', () => {
         it('should respond with 200 and user activity if successful', async () => {
           const mockResult = { /* mock result data */ };
@@ -230,6 +254,30 @@ describe('social.js', () => {
           const userId = 'user123';
           const response = await request(app)
             .get(`${basePath}/following/${userId}`);
+    
+          expect(response.status).toBe(500);
+        });
+      });
+
+      describe('GET ' + basePath + '/following/list/:userId', () => {
+        it('should respond with 200 and user activity if successful', async () => {
+          const mockResult = { /* mock result data */ };
+          const userId = 'user123';
+          socialService.getFollowingList.mockResolvedValue(mockResult);
+    
+          const response = await request(app)
+            .get(`${basePath}/following/list/${userId}`);
+    
+          expect(response.status).toBe(200);
+          expect(response.body).toEqual(mockResult);
+        });
+    
+        it('should respond with 500 if an error occurs', async () => {
+          socialService.getFollowingList.mockRejectedValue(new Error('Internal Server Error'));
+    
+          const userId = 'user123';
+          const response = await request(app)
+            .get(`${basePath}/following/list/${userId}`);
     
           expect(response.status).toBe(500);
         });

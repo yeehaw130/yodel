@@ -32,7 +32,9 @@ POST /social/rejectfollow
 GET /social/followingStatus
 GET /social/requests/{userId}
 GET /social/followers/{userId}
+GET /social/followers/list/{userId}
 GET /social/following/{userId}
+GET /social/following/list/{userId}
 POST /social/share
 GET /social/activity/{userId}
 

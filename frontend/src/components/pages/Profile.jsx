@@ -95,11 +95,9 @@ const Profile = () => {
       try {
         const followersListResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/social/followers/list/${userId}`).then(res => res.data);
         setFollowersList(followersListResponse);
-        console.log("followerlist ", followersListResponse);
 
         const followingListResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/social/following/list/${userId}`).then(res => res.data);
         setFollowingList(followingListResponse);
-        console.log("followinglist ", followingListResponse);
       } catch (error) {
         throw new Error("Failed to fetch social lists:  " + (error.response?.data || error.message));
       }
@@ -192,7 +190,7 @@ const Profile = () => {
             <ul className="dropdown">
               {followersList.map((follower) => (
                 <li key={follower.id} className="dropdown-item">
-                  <li>{follower.username}</li>
+                  <span>{follower.username}</span>
                 </li>
               ))}
             </ul>
@@ -206,7 +204,7 @@ const Profile = () => {
             <ul className="dropdown">
               {followingList.map((following) => (
                 <li key={following.id} className="dropdown-item">
-                  <li>{following.username}</li>
+                  <span>{following.username}</span>
                 </li>
               ))}
             </ul>
