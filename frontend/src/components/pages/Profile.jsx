@@ -190,8 +190,11 @@ const Profile = () => {
           </button>
           {showFollowers && (
             <ul className="dropdown">
-              <li>test</li>
-              {/* Add more follower items here */}
+              {followersList.map((follower) => (
+                <li key={follower.id} className="dropdown-item">
+                  <li>{follower.username}</li>
+                </li>
+              ))}
             </ul>
           )}
         </div>
@@ -201,8 +204,11 @@ const Profile = () => {
           </button>
           {showFollowing && (
             <ul className="dropdown">
-              <li>test2</li>
-              {/* Add more following items here */}
+              {followingList.map((following) => (
+                <li key={following.id} className="dropdown-item">
+                  <li>{following.username}</li>
+                </li>
+              ))}
             </ul>
           )}
         </div>
