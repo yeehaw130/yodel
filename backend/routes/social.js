@@ -101,6 +101,28 @@ router.get('/following/:userId', async (req, res) => {
     }
 });
 
+// GET followers of a user and see them as a dropdown list
+router.get('/followers/list/:userId', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const followers = await socialService.getFollowersList(userId);
+        res.json(followers);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// GET users followed by a user and see them as a dropdown list
+router.get('/following/list/:userId', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const following = await socialService.getFollowingList(userId);
+        res.json(following);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
 // GET pending follow requests for a user
 router.get('/requests/:userId', async (req, res) => {
     try {

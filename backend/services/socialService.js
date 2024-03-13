@@ -108,6 +108,27 @@ const getFollowers = async (userId) => {
     return followers;
 };
 
+
+const getFollowersList = async (userId) => {
+    const docRef = db.collection('follows').where('following', '==', userId).where('status', '==', 'active');
+    const docSnapshot = await docRef.get();
+    const followers = [];
+    docSnapshot.forEach(doc => {
+        followers.push(doc.data().follower);
+    });
+
+    final_followers = [];
+    for (const follower of followers) {
+        const followersQuery = db.collection('users').where('__name__', '==', follower);
+        const followersSnapshot = await followersQuery.get();
+        followersSnapshot.forEach((doc) => {
+            final_followers.push({ id: follower, username: doc.data().username, profilePictureUrl: doc.data().profilePictureUrl });
+        })
+    }
+    return final_followers;
+};
+
+
 const getFollowing = async (userId) => {
     const docRef = db.collection('follows').where('follower', '==', userId).where('status', '==', 'active');
     const docSnapshot = await docRef.get();
@@ -117,6 +138,26 @@ const getFollowing = async (userId) => {
     });
     return following;
 }
+
+const getFollowingList = async (userId) => {
+    const docRef = db.collection('follows').where('follower', '==', userId).where('status', '==', 'active');
+    const docSnapshot = await docRef.get();
+    const following = [];
+    docSnapshot.forEach(doc => {
+        following.push(doc.data().following);
+    });
+
+    final_following = [];
+    for (const followed of following) {
+        const followingQuery = db.collection('users').where('__name__', '==', followed);
+        const followingSnapshot = await followingQuery.get();
+        followingSnapshot.forEach((doc) => {
+            final_following.push({ id: followed, username: doc.data().username, profilePictureUrl: doc.data().profilePictureUrl });
+        })
+    }
+    return final_followers;
+}
+
 
 const getFollowRequests = async (userId) => {
     const docRef = db.collection('follows').where('following', '==', userId).where('status', '==', 'pending');
@@ -155,6 +196,8 @@ module.exports = {
     getUserActivity,
     getFollowers,
     getFollowing,
+    getFollowersList,
+    getFollowingList,
     getFollowRequests,
     getUser,
     followingStatus

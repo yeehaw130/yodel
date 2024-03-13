@@ -20,6 +20,23 @@
   gap: 10px;
   /* Adds some space between items */
 }
+.social-div {
+  display: flex;
+}
+
+.dropdown-container {
+  position: relative;
+}
+
+.dropdown {
+  list-style-type: none;
+  padding-left: 0;
+  width: 100%;
+}
+
+.dropdown span:hover {
+  cursor: pointer;
+}
 
 .playlist-dropdown {
   margin: 0;
