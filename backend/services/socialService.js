@@ -110,6 +110,7 @@ const getFollowers = async (userId) => {
 
 
 const getFollowersList = async (userId) => {
+    console.log("Got to getFollowersList function in socialService.js");
     const docRef = db.collection('follows').where('following', '==', userId).where('status', '==', 'active');
     const docSnapshot = await docRef.get();
     const followers = [];
@@ -117,12 +118,15 @@ const getFollowersList = async (userId) => {
         followers.push(doc.data().follower);
     });
 
+    console.log("the list of followers is: ");
+    console.log(followers);
+
     final_followers = [];
     for (const follower of followers) {
-        const followersQuery = db.collection('users').where('__name__', '==', follower.id);
+        const followersQuery = db.collection('users').where('__name__', '==', follower);
         const followersSnapshot = await followersQuery.get();
         followersSnapshot.forEach((doc) => {
-            final_followers.push({ id: follower.id, username: doc.data().username, profilePictureUrl: doc.data().profilePictureUrl });
+            final_followers.push({ id: follower, username: doc.data().username, profilePictureUrl: doc.data().profilePictureUrl });
         })
     }
     return final_followers;
@@ -140,6 +144,7 @@ const getFollowing = async (userId) => {
 }
 
 const getFollowingList = async (userId) => {
+    console.log("Got to getFollowingList function in socialService.js");
     const docRef = db.collection('follows').where('follower', '==', userId).where('status', '==', 'active');
     const docSnapshot = await docRef.get();
     const following = [];
@@ -147,13 +152,15 @@ const getFollowingList = async (userId) => {
         following.push(doc.data().following);
     });
 
+    console.log("the list of following is: ");
+    console.log(following);
 
     final_following = [];
     for (const followed of following) {
-        const followingQuery = db.collection('users').where('__name__', '==', followed.id);
+        const followingQuery = db.collection('users').where('__name__', '==', followed);
         const followingSnapshot = await followingQuery.get();
         followingSnapshot.forEach((doc) => {
-            final_following.push({ id: followed.id, username: doc.data().username, profilePictureUrl: doc.data().profilePictureUrl });
+            final_following.push({ id: followed, username: doc.data().username, profilePictureUrl: doc.data().profilePictureUrl });
         })
     }
     return final_followers;
@@ -197,6 +204,8 @@ module.exports = {
     getUserActivity,
     getFollowers,
     getFollowing,
+    getFollowersList,
+    getFollowingList,
     getFollowRequests,
     getUser,
     followingStatus
