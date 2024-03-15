@@ -205,4 +205,5 @@ module.exports = {
     fetchPlaylists,
     importPlaylist,
     getUserPlaylists,
+    importSong
 };
