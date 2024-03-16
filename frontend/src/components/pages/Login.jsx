@@ -3,6 +3,56 @@ import { useNavigate, Link } from "react-router-dom";
 import { useUserAuth } from "../../auth/Auth";
 import { BasicButton, PageContainer, StyledForm, ErrorMessage } from "../CommonStyles";
 
+/**
+ * Component for logging in
+ *
+ * @component
+ * @example
+ * const email = 'krishpatel@ucla.edu'
+ * const password = 'redacted'
+ *	return (
+ *		<PageContainer>
+ *			<StyledForm>
+ *				<h1> Login </h1>
+ *				<div>
+ *					<label htmlFor="email-address">
+ *						Email address
+ *					</label>
+ *					<input
+ *						id="email-address"
+ *						type="email"
+ *						label="Email address"
+ *						value={email}
+ *						onChange={(e) => setEmail(e.target.value)}
+ *						required
+ *						placeholder="Email address"
+ *					/>
+ *				</div>
+ *				<div>
+ *					<label htmlFor="password">
+ *						Password
+ *					</label>
+ *					<input
+ *						id="password"
+ *						type="password"
+ *						label="Create password"
+ *						value={password}
+ *						onChange={(e) => setPassword(e.target.value)}
+ *						required
+ *						placeholder="Password"
+ *					/>
+ *				</div>
+ *				<BasicButton onClick={onSubmit}>
+ *					Login
+ *				</BasicButton>
+ *			</StyledForm>
+ *			{error && <ErrorMessage>{error}</ErrorMessage>}
+ *			<p>
+ *				Don't have an account? <Link to="/signup">Sign up</Link>
+ *			</p>
+ *	 </PageContainer>
+ *	)
+ */
 const Login = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
